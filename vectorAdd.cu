@@ -37,7 +37,6 @@ vectorAdd(const float *A, const float *B, float *C, int numElements, int operaci
 		int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones) + j;
 		if (i < numElements )
 		{	
-			//printf("valor de i %d\n",i);
 		    C[i] = A[i] + B[i];
 		}
 	}
@@ -64,7 +63,8 @@ main(void)
 
     // Print the vector length to be used, and compute its size
     int numElements = 50000;
-	int operacionPorHilo = numElements>(blocksPerGrid*threadsPerBlock)?((numElements/(blocksPerGrid*threadsPerBlock))+1):1;
+    int hilosTotales = blocksPerGrid*threadsPerBlock;
+	int operacionPorHilo = numElements > hilosTotales ? (( numElements / hilosToltales)) + 1 ) : 1;
     size_t size = numElements * sizeof(float);
     printf("[Vector addition of %d elements]\n", numElements);
 
