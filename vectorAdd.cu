@@ -147,6 +147,7 @@ main(void)
                deviceProp.multiProcessorCount;*/
 	
     printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
+    printf("Operaciones por Hilo %d\n",operacionPorHilo);
     vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, numElements,operacionPorHilo);
     err = cudaGetLastError();
 
