@@ -162,7 +162,7 @@ main(void)
 
     if (err != cudaSuccess)
     {
-        printf("device_c%f, host_c%f\n", *d_C, *h_C);
+        fprintf(stderr, "device_c%f, host_c%f\n", *d_C, *h_C);
         fprintf(stderr, "Failed to copy vector C from device to host (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
