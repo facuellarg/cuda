@@ -62,7 +62,7 @@ main(void)
     
 
     // Print the vector length to be used, and compute its size
-    int numElements = 50000;
+    int numElements = 5000;
 	int operacionPorHilo = numElements>(blocksPerGrid*threadsPerBlock)?((numElements/blocksPerGrid*threadsPerBlock)+1):1;
     size_t size = numElements * sizeof(float);
     printf("[Vector addition of %d elements]\n", numElements);
