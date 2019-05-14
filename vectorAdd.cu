@@ -36,7 +36,8 @@ vectorAdd(const float *A, const float *B, float *C, int numElements, int operaci
 	for(int j = 0; j < operaciones; j++){
 		int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones) + j;
 		if (i < numElements)
-		{
+		{	
+			printf("valor de i %d\n",i);
 		    C[i] = A[i] + B[i];
 		}
 	}
