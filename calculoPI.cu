@@ -13,14 +13,13 @@ calcularPi( float *sum, int operaciones)
   if (i % 2 == 0){
     for(int j = 0; j < operaciones; j++ ){
       sum[i] += 1.0/(2*(i + j)+1);
-      
-      j ++
+      j ++;
       sum[i] -= 1.0/(2*(i + j)+1);
     }
   }else{
     for(int j = 0; j < operaciones; j = j + 2 ){
       sum[i] += 1.0/(2*(i + j)+1);
-      j ++
+      j ++;
       sum[i] -= 1.0/(2*(i + j)+1);
     }
   }
