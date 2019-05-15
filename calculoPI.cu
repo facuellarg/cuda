@@ -3,8 +3,7 @@
 #include <cuda_runtime.h>
 #include <helper_cuda.h>
 
-void calcularPi(int ID, double* sum, int h){    
-}
+
 __global__ void
 calcularPi(float *pi, int numElements, int operaciones)
 {
@@ -16,7 +15,7 @@ calcularPi(float *pi, int numElements, int operaciones)
 	}
     
 }
-void main()
+int main(void)
 {
   // declarar  la cantidad de hilos segun la gpu
   cudaError_t err = cudaSuccess;
@@ -44,12 +43,12 @@ void main()
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_pi, numIt,operacionPorHilo);
+  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_pi, numIt,operacionPorHilo);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
   {
-      fprintf(stderr, "Failed to launch vectorAdd kernel (error code %s)!\n", cudaGetErrorString(err));
+      fprintf(stderr, "Failed to launch calcularPi kernel (error code %s)!\n", cudaGetErrorString(err));
       exit(EXIT_FAILURE);
   }
 
@@ -63,5 +62,6 @@ void main()
         exit(EXIT_FAILURE);
     }
     printf("valor de pi %f\n", *h_pi);
+    return 0;
 
 }
