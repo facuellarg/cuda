@@ -31,7 +31,6 @@ int main(void)
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
-  float *h_pi, *d_pi;
   float *h_pi = (float)malloc(size);
   *h_pi = 0;
   float *d_pi = NULL;
