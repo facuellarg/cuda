@@ -2,8 +2,6 @@
 #include "stdio.h"
 #include <cuda_runtime.h>
 #include <helper_cuda.h>
-#define NUM_THREADS 4
-static long num_steps = 1000000;
 
 void calcularPi(int ID, double* sum, int h){    
 }
@@ -32,6 +30,38 @@ void main()
   int numIt = 4000000000;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
 	int operacionPorHilo = numIt > hilosTotales ? (( numIt / hilosTotales )) + 1 ) : 1;
-  float *pi;
-  *pi = 0;
+  float * h_pi, *d_pi ;
+  *h_pi = 0;
+  *d_pi = 0;
+
+  err = cudaMemcpy(d_pi, h_pi, sizeof(float), cudaMemcpyHostToDevice);
+
+  if (err != cudaSuccess)
+  {
+      fprintf(stderr, "Failed to copy vector pi from host to device (error code %s)!\n", cudaGetErrorString(err));
+      exit(EXIT_FAILURE);
+  }
+
+  printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
+  printf("Operaciones por Hilo %d\n",operacionPorHilo);
+  vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_pi, numIt,operacionPorHilo);
+  err = cudaGetLastError();
+
+  if (err != cudaSuccess)
+  {
+      fprintf(stderr, "Failed to launch vectorAdd kernel (error code %s)!\n", cudaGetErrorString(err));
+      exit(EXIT_FAILURE);
+  }
+
+  printf("Copy output data from the CUDA device to the host memory\n");
+    err = cudaMemcpy(h_pi, d_pi, sizeof(float), cudaMemcpyDeviceToHost);
+
+    if (err != cudaSuccess)
+    {
+        
+        fprintf(stderr, "Failed to copy h_pi from device to host (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+    printf("valor de pi %f\n", *h_pi); d d
+
 }
