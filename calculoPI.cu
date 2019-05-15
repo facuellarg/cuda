@@ -14,7 +14,7 @@ calcularPi(float *pi, int operaciones)
     
     float aumento = (float)(2/((4*(i + j) + 1)*(4*(i + j) + 3)));
     if(i + j < 10){
-      printf("En %f valor %f\n",i, aumento);
+      printf("En %f valor %f\n",i + j, aumento);
     }
     *pi += aumento ;
 	}
