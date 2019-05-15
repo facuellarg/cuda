@@ -12,7 +12,7 @@ calcularPi(float *pi, int numElements, int operaciones)
 	for(int j = 0; j < operaciones; j++){
      i = i + j;
      *pi += 2/((4*i + 1)*(4*i + 3));
-     printf("pi: %d\n",i);
+     printf("pi: %li\n",i);
 	}
     
 }
