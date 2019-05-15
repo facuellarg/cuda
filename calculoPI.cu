@@ -10,9 +10,9 @@ calcularPi(float *pi, int numElements, int operaciones)
 {
 	for(int j = 0; j < operaciones; j = j+4){
 		int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones) + j;
-	    pi+= 1.0/i;
+	      *pi+= 1.0/i;
         i +=2;
-        pi -= 1.0/i;	
+        *pi -= 1.0/i;	
 	}
     
 }
@@ -27,10 +27,10 @@ void main()
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  int numIt = 4000000000;
+  long numIt = 4000000000;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
 	int operacionPorHilo = numIt > hilosTotales ? (( numIt / hilosTotales )) + 1 ) : 1;
-  float * h_pi, *d_pi ;
+  float *h_pi, *d_pi;
   *h_pi = 0;
   *d_pi = 0;
 
@@ -62,6 +62,6 @@ void main()
         fprintf(stderr, "Failed to copy h_pi from device to host (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
-    printf("valor de pi %f\n", *h_pi); d d
+    printf("valor de pi %f\n", *h_pi);
 
 }
