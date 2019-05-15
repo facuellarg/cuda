@@ -31,7 +31,7 @@ calcularPi2( float *sum, int operaciones)
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
   sum[i] = 0;
   for(int j = 0; j < operaciones; j++ ){
-    sum[i] += 2.0/(4.0*(i+j)+1)*(4.0*(i+j)+3);
+    sum[i] += 2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
   }
   
 }
