@@ -18,9 +18,9 @@ calcularPi( float *sum, int operaciones)
     }
   }else{
     for(int j = 0; j < operaciones; j = j + 2 ){
-      sum[i] += 1.0/(2*(i + j)+1);
-      j ++;
       sum[i] -= 1.0/(2*(i + j)+1);
+      j ++;
+      sum[i] += 1.0/(2*(i + j)+1);
     }
   }
 	
