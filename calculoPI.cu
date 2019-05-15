@@ -28,7 +28,8 @@ int main(void)
   int blocksPerGrid =   deviceProp.multiProcessorCount;
   long numIt = 4000000000;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
-	int operacionPorHilo = numIt > hilosTotales ? (( numIt / hilosTotales )) + 1 ) : 1;
+  int operacionPorHilo;
+  operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
   float h_pi, d_pi;
   h_pi = 0;
   d_pi = 0;
