@@ -27,7 +27,7 @@ int main(void)
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  long numIt = 4000000000;
+  int numIt = 4e8;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
