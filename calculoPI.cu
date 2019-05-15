@@ -84,7 +84,7 @@ int main(void)
         fprintf(stderr, "Failed to copy h_pi from device to host (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
-    for(int i = 0 ; i < hilosTotales; i ++){
+    for(int i = 1 ; i < hilosTotales; i ++){
         h_pi += h_sum[i];
     }
     h_pi = h_pi * 4;
