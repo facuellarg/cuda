@@ -11,6 +11,7 @@ calcularPi(float *pi, int numElements, int operaciones)
   long i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
 	for(int j = 0; j < operaciones; j++){
      i = i + j;
+     printf("division: %f\n",(2/((4*i + 1)*(4*i + 3))));
      *pi += 2/((4*i + 1)*(4*i + 3));
 	}
     
