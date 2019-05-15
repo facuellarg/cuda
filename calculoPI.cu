@@ -12,7 +12,7 @@ calcularPi( float *sum, int operaciones)
   sum[i] = 0;
   if (i % 2 == 0){
     for(int j = 0; j < operaciones; j = j + 2 ){
-      sum[i] += 1.0/(i + j);
+      sum[i] += 1.0/(float)(i + j);
       if(i == 0 && threadIdx.x < 10){
         
       }
