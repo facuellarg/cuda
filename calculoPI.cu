@@ -6,15 +6,12 @@
 
 
 __global__ void
-calcularPi(float *pi, int numElements, int operaciones)
+calcularPi(float *pi, int operaciones)
 {
   int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
 	for(int j = 0; j < operaciones; j++){
-     i = i + j;
-     if (i < 100){
-      printf("valor : %f\nvalor i: %d\n",(2/((4*i + 1)*(4*i + 3))),i );
-     }
-     *pi += 2/((4*i + 1)*(4*i + 3));
+     
+     *pi += 2/((4*(i+j) + 1)*(4*(i+j) + 3));
 	}
     
 }
@@ -55,7 +52,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_pi, numIt,operacionPorHilo);
+  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_pi, operacionPorHilo);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
