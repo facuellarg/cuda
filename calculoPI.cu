@@ -8,11 +8,10 @@
 __global__ void
 calcularPi(float *pi, int numElements, int operaciones)
 {
-	for(int j = 0; j < operaciones; j = j+4){
-		int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones) + j + 1;
-	      *pi+= 1.0/i;
-        i +=2;
-        *pi -= 1.0/i;	
+  int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
+	for(int j = 0; j < operaciones; j++){
+     i = i + j;
+     *pi += 2/((4*i)+1*(4*i + 3))
 	}
     
 }
@@ -63,7 +62,7 @@ int main(void)
   }
 
   printf("Copy output data from the CUDA device to the host memory\n");
-    err = cudaMemcpy(h_pi, d_pi, sizeof(float), cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_pi, d_pi, size, cudaMemcpyDeviceToHost);
 
     if (err != cudaSuccess)
     {
