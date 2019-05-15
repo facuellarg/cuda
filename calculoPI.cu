@@ -12,16 +12,17 @@ calcularPi( float *sum, int operaciones, int t)
   if (i < t){
     sum[i] = 0;
     if (i % 2 == 0){
-      for(int j = 0; j < operaciones; j++ ){
-        sum[i] += 1.0/(2*(i + j)+1);
-        j ++;
-        sum[i] -= 1.0/(2*(i + j)+1);
+      for(int j = 0; j < operaciones*2; j=j+2 ){
+        if((i+j)==0) j++;
+        sum[i] += 1.0/(i + j);
+        j =j+2;
+        sum[i] -= 1.0/(i + j);
       }
     }else{
-      for(int j = 0; j < operaciones; j++ ){
-        sum[i] -= 1.0/(2*(i + j)+1);
-        j ++;
-        sum[i] += 1.0/(2*(i + j)+1);
+      for(int j = 0; j < operaciones*2; j=j+2 ){
+        sum[i] -= 1.0/(i + j);
+        j =j+2;
+        sum[i] += 1.0/(i + j);
       }
     } 
   } 
@@ -31,25 +32,12 @@ __global__ void
 calcularPi2( float *sum, int operaciones, int t)
 {
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
-  if (i < t){
+  if (i < t ){
     sum[i] = 0;
-    if (i % 2 == 0){
-      for(int j = 0; j < operaciones; j=j+2 ){
-        if ((i + j )== 0){
-          j++;
-        }
-        sum[i] += 1.0/((i + j));
-        j = j + 2;
-        sum[i] -= 1.0/((i + j));
-      }
-    }else{
-      for(int j = 0; j < operaciones; j=j+2 ){
-        sum[i] -= 1.0/((i + j));
-        j = j +2;
-        sum[i] += 1.0/((i + j));
-      }
-    } 
-  } 
+    for(int j = 0; j < operaciones; j++ ){
+      sum[i] += 2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
+    }
+  }
   
 }
 int main(void)
@@ -91,7 +79,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo, hilosTotales);
+  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo, hilosTotales);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
