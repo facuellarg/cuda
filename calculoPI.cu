@@ -6,22 +6,24 @@
 
 
 __global__ void
-calcularPi( float *sum, int operaciones)
+calcularPi( float *sum, int operaciones, int tamaño)
 {
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
-  sum[i] = 0;
-  if (i % 2 == 0){
-    for(int j = 0; j < operaciones; j++ ){
-      sum[i] += 1.0/(2*(i + j)+1);
-      j ++;
-      sum[i] -= 1.0/(2*(i + j)+1);
-    }
-  }else{
-    for(int j = 0; j < operaciones; j++ ){
-      sum[i] -= 1.0/(2*(i + j)+1);
-      j ++;
-      sum[i] += 1.0/(2*(i + j)+1);
-    }
+  if (i < tamaño){
+    sum[i] = 0;
+    if (i % 2 == 0){
+      for(int j = 0; j < operaciones; j++ ){
+        sum[i] += 1.0/(2*(i + j)+1);
+        j ++;
+        sum[i] -= 1.0/(2*(i + j)+1);
+      }
+    }else{
+      for(int j = 0; j < operaciones; j++ ){
+        sum[i] -= 1.0/(2*(i + j)+1);
+        j ++;
+        sum[i] += 1.0/(2*(i + j)+1);
+      }
+    } 
   } 
 }
 
@@ -29,9 +31,11 @@ __global__ void
 calcularPi2( float *sum, int operaciones)
 {
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
-  sum[i] = 0;
-  for(int j = 0; j < operaciones; j++ ){
-    sum[i] += 2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
+  if (i < tamaño ){
+    sum[i] = 0;
+    for(int j = 0; j < operaciones; j++ ){
+      sum[i] += 2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
+    }
   }
   
 }
@@ -52,9 +56,7 @@ int main(void)
   int operacionPorHilo;
   size_t size_pi = sizeof(float) * hilosTotales;
   operacionPorHilo = (numIt > hilosTotales ) ? (int)(ceil(numIt/hilosTotales) ) : 1;
-  if(operacionPorHilo > 1 && operacionPorHilo % 2 != 0){
-    operacionPorHilo ++;
-  }
+
   float h_pi = 0.0;
   float *h_sum = (float*)malloc(size_pi);
   float *d_sum = NULL;
@@ -76,7 +78,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
+  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo, hilosTotales);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
