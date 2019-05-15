@@ -11,20 +11,17 @@ calcularPi( float *sum, int operaciones)
   int i = ((blockDim.x * blockIdx.x + threadIdx.x+1));
   sum[i] = 0;
   if (i % 2 == 0){
-    for(int j = 0; j < operaciones; j = j + 2 ){
-      sum[i] += 1.0/(float)(i + j);
-      if(i == 0 && threadIdx.x < 10){
-        
-      }
-      j = j + 2;
-      sum[i] -= 1.0/(i + j);
+    for(int j = 0; j < operaciones; j++ ){
+      sum[i] += 1.0/(2*(i + j)+1);
+      
+      j ++
+      sum[i] -= 1.0/(2*(i + j)+1);
     }
   }else{
     for(int j = 0; j < operaciones; j = j + 2 ){
-    
-      sum[i] -= 1.0/(i + j);
-      j = j + 2;
-      sum[i] += 1.0/(i + j);
+      sum[i] += 1.0/(2*(i + j)+1);
+      j ++
+      sum[i] -= 1.0/(2*(i + j)+1);
     }
   }
 	
