@@ -9,7 +9,7 @@ __global__ void
 calcularPi(float *pi, int operaciones)
 {
   int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
-  if(threadIdx.x < 10){
+  if(threadIdx.x < 10 && blockIdx.x == 0){
     printf("valor de i%d\tblockDim%d\tblockId%d\threadhId%d\n",i, blockDim.x, blockIdx.x,threadIdx.x);
   }
 	for(int j = 0; j < operaciones; j++){
