@@ -11,7 +11,7 @@ calcularPi( float *sum, int operaciones)
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
   sum[i] = 0;
 	for(int j = 0; j < operaciones; j++){
-    float aumento = (float)(2/((4*(i + j) + 1)*(4*(i + j) + 3)));
+    float aumento = (float)(2/((4.0*(i + j) + 1)*(4*(i + j) + 3)));
     if (i < 1 && j < 10){
       printf("valor de i :%d\taumento: %f\n",i+j,aumento);
     }
@@ -77,7 +77,6 @@ int main(void)
     }
     for(int i = 0 ; i < hilosTotales; i ++){
         h_pi += h_sum[i];
-        printf("valor %f\n", h_sum[i]);
     }
 
     printf("valor de pi %f\n", (h_pi)*4);
