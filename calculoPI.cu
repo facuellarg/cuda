@@ -74,7 +74,7 @@ int main(void)
     }
     for(int i = 0 ; i < hilosTotales; i ++){
         h_pi += h_sum[i];
-        printf("valor %f\n" h_sum[i]);
+        printf("valor %f\n", h_sum[i]);
     }
 
     printf("valor de pi %f\n", (h_pi)*4);
