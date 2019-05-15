@@ -52,6 +52,9 @@ int main(void)
   int operacionPorHilo;
   size_t size_pi = sizeof(float) * hilosTotales;
   operacionPorHilo = (numIt > hilosTotales ) ? (int)(ceil(numIt/hilosTotales) ) : 1;
+  if(operacionPorHilo > 1 && operacionPorHilo % 2 != 0){
+    operacionPorHilo ++;
+  }
   float h_pi = 0.0;
   float *h_sum = (float*)malloc(size_pi);
   float *d_sum = NULL;
@@ -73,7 +76,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
+  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
