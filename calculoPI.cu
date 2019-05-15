@@ -8,12 +8,12 @@
 __global__ void
 calcularPi(float *pi, int operaciones)
 {
-  int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
+  double i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
   
 	for(int j = 0; j < operaciones; j++){
     i = i + j;
     if(i < 10){
-      printf("En %d valor %d",i,(2/((4*(i) + 1)*(4*(i) + 3))));
+      printf("En %f valor %d\n",i,(2/((4*(i) + 1)*(4*(i) + 3))));
     }
     *pi = *pi + (2/((4*(i) + 1)*(4*(i) + 3)));
 	}
