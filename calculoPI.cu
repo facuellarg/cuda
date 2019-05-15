@@ -8,7 +8,7 @@
 __global__ void
 calcularPi(float *pi, int numElements, int operaciones)
 {
-  int i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
+  long i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
 	for(int j = 0; j < operaciones; j++){
      i = i + j;
      *pi += 2/((4*i + 1)*(4*i + 3));
