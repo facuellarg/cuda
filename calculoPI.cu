@@ -31,10 +31,10 @@ int main(void)
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
-  float *h_pi = (float)malloc(size);
+  float *h_pi = (float*)malloc(size);
   *h_pi = 0;
   float *d_pi = NULL;
-  err = cudaMalloc((void *)&d_pi, size);
+  err = cudaMalloc((void **)&d_pi, size);
   if (err != cudaSuccess)
   {
       fprintf(stderr, "Failed to allocate device d_pi (error code %s)!\n", cudaGetErrorString(err));
