@@ -11,9 +11,9 @@ calcularPi(float *pi, int operaciones)
   float i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
   
 	for(int j = 0; j < operaciones; j++){
-    i = i + j;
-    float aumento = (float)(2/((4*i + 1)*(4*i + 3)));
-    if(i < 10){
+    
+    float aumento = (float)(2/((4*(i + j) + 1)*(4*(i + j) + 3)));
+    if(i + j < 10){
       printf("En %f valor %f\n",i, aumento);
     }
     *pi += aumento ;
