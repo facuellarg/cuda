@@ -14,7 +14,7 @@ calcularPi(float *pi, int operaciones)
   }
 	for(int j = 0; j < operaciones; j++){
     i = i + j;
-    *pi = *pi + (2/((4*(i+j) + 1)*(4*(i+j) + 3)));
+    *pi = *pi + (2/((4*(i) + 1)*(4*(i) + 3)));
 	}
     
 }
