@@ -12,14 +12,14 @@ calcularPi( float *sum, int operaciones, int t)
   if (i < t){
     sum[i] = 0;
     if (i % 2 == 0){
-      for(int j = 0; j < operaciones; j=j+2 ){
-        if((i+j)==0) j++;
+      for(int j = 0; j < operaciones*2; j=j+2 ){
+        if ((i+j) == 0 ) j++;
         sum[i] += 1.0/(i + j);
         j =j+2;
         sum[i] -= 1.0/(i + j);
       }
     }else{
-      for(int j = 0; j < operaciones; j=j+2 ){
+      for(int j = 0; j < operaciones*2; j=j+2 ){
         sum[i] -= 1.0/(i + j);
         j =j+2;
         sum[i] += 1.0/(i + j);
@@ -79,7 +79,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo, hilosTotales);
+  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo, hilosTotales);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
