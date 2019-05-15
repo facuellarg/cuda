@@ -6,7 +6,7 @@
 
 
 __global__ void
-calcularPi( float*sum, int operaciones)
+calcularPi( float *sum, int operaciones)
 {
   float i = ((blockDim.x * blockIdx.x + threadIdx.x));
   sum[i] = 0;
@@ -31,7 +31,7 @@ int main(void)
   float numIt = 4e9;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
-  size_t size_pi = sizeof(float*hilosTotales);
+  size_t size_pi = sizeof(float) * hilosTotales;
   operacionPorHilo = (numIt > hilosTotales ) ? (int)(ceil(numIt/hilosTotales) ) : 1;
   float h_pi = 0.0;
   float *h_sum = (float*)malloc(size_pi);
