@@ -8,12 +8,14 @@
 __global__ void
 calcularPi( float *sum, int operaciones)
 {
-  int i = ((blockDim.x * blockIdx.x + threadIdx.x));
+  int i = ((blockDim.x * blockIdx.x + threadIdx.x+1));
   sum[i] = 0;
   if (i % 2 == 0){
     for(int j = 0; j < operaciones; j = j + 2 ){
-    
       sum[i] += 1.0/(i + j);
+      if(i == 0 && threadIdx.x < 10){
+        
+      }
       j = j + 2;
       sum[i] -= 1.0/(i + j);
     }
@@ -84,7 +86,7 @@ int main(void)
         fprintf(stderr, "Failed to copy h_pi from device to host (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
-    for(int i = 1 ; i < hilosTotales; i ++){
+    for(int i = 0 ; i < hilosTotales; i ++){
         h_pi += h_sum[i];
     }
     h_pi = h_pi * 4;
