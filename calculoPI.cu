@@ -34,7 +34,8 @@ calcularPi2( float *sum, int operaciones, int t)
   if (i < t){
     sum[i] = 0;
     if (i % 2 == 0){
-      for(int j = 1; j < operaciones; j=j+2 ){
+      for(int j = 0; j < operaciones; j=j+2 ){
+        if ((i + j )==0) continue;
         sum[i] += 1.0/((i + j));
         j = j + 2;
         sum[i] -= 1.0/((i + j));
@@ -110,7 +111,7 @@ int main(void)
         h_pi += h_sum[i];
     }
     h_pi = h_pi * 4;
-    printf("valor de pi %.6f\n",h_pi );
+    printf("valor de pi %.10f\n",h_pi );
     return 0;
 
 }
