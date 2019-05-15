@@ -30,7 +30,7 @@ int main(void)
   int blocksPerGrid =   deviceProp.multiProcessorCount;
   long numIt = 4e9;
   float hilosTotales = blocksPerGrid*threadsPerBlock;
-  int operacionPorHilo;
+  float operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? ( ceil(numIt/hilosTotales) ) : 1;
   float *h_pi = (float*)malloc(size);
   *h_pi = 0;
