@@ -8,7 +8,7 @@
 __global__ void
 calcularPi( float *sum, int operaciones)
 {
-  int i = ((blockDim.x * blockIdx.x + threadIdx.x+1));
+  int i = ((blockDim.x * blockIdx.x + threadIdx.x));
   sum[i] = 0;
   if (i % 2 == 0){
     for(int j = 0; j < operaciones; j++ ){
