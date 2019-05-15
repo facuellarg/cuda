@@ -31,7 +31,7 @@ int main(void)
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  int numIt = 4e8;
+  int numIt = 4e9;
   printf("valor inicial%d\n", numIt);
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
