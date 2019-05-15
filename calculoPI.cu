@@ -13,7 +13,7 @@ calcularPi(float *pi, int operaciones)
 	for(int j = 0; j < operaciones; j++){
     i = i + j;
     if(i < 10){
-      printf("En %f valor %d\n",i,(2/((4*i + 1)*(4*i + 3))));
+      printf("En %f valor %f\n",i,(float)(2/((4*i + 1)*(4*i + 3))));
     }
     *pi = *pi + (2/((4*i + 1)*(4*i + 3)));
 	}
