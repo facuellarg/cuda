@@ -38,7 +38,7 @@ int main(void)
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  float numIt = 1e10;
+  float numIt = 1e11;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   size_t size_pi = sizeof(float) * hilosTotales;
