@@ -1,5 +1,6 @@
 #include "omp.h"
 #include "stdio.h"
+#include <math.h>
 #include <cuda_runtime.h>
 #include <helper_cuda.h>
 
@@ -27,10 +28,10 @@ int main(void)
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  int numIt = 4e8;
-  int hilosTotales = blocksPerGrid*threadsPerBlock;
+  int numIt = 4e9;
+  float hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
-  operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
+  operacionPorHilo = (numIt > hilosTotales ) ? ( ceil(numIt/hilosTotales) ) : 1;
   float *h_pi = (float*)malloc(size);
   *h_pi = 0;
   float *d_pi = NULL;
