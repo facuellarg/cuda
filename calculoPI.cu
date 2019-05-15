@@ -22,9 +22,18 @@ calcularPi( float *sum, int operaciones)
       j ++;
       sum[i] += 1.0/(2*(i + j)+1);
     }
+  } 
+}
+
+__global__ void
+calcularPi2( float *sum, int operaciones)
+{
+  int i = ((blockDim.x * blockIdx.x + threadIdx.x));
+  sum[i] = 0;
+  for(int j = 0; j < operaciones; j++ ){
+    sum[i] += 2.0/(4.0*(i+j)+1)*(4.0*(i+j)+3);
   }
-	
-    
+  
 }
 int main(void)
 {
@@ -64,7 +73,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
+  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
