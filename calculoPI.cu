@@ -11,10 +11,7 @@ calcularPi( float *sum, int operaciones)
   int i = ((blockDim.x * blockIdx.x + threadIdx.x));
   sum[i] = 0;
 	for(int j = 0; j < operaciones; j++){
-    float aumento = (float)(2/((4.0*(i + j) + 1)*(4*(i + j) + 3)));
-    if (i < 1 && j < 10){
-      printf("valor de i :%d\taumento: %f\n",i+j,aumento);
-    }
+    float aumento = (float)(2/((4.0*(i + j) + 1)*(4.0*(i + j) + 3)));
     sum[i] += aumento ;
 	}
     
@@ -31,7 +28,7 @@ int main(void)
 	int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
-  float numIt = 4e7;
+  float numIt = 4e9;
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   size_t size_pi = sizeof(float) * hilosTotales;
@@ -78,8 +75,8 @@ int main(void)
     for(int i = 0 ; i < hilosTotales; i ++){
         h_pi += h_sum[i];
     }
-
-    printf("valor de pi %f\n", (h_pi)*4);
+    h_pi = h_pi * 4;
+    printf("valor de pi %f\n",h_pi );
     return 0;
 
 }
