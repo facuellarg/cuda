@@ -76,7 +76,7 @@ int main(void)
         h_pi += h_sum[i];
     }
     h_pi = h_pi * 4;
-    printf("valor de pi %f\n",h_pi );
+    printf("valor de pi %.10f\n",h_pi );
     return 0;
 
 }
