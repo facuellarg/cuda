@@ -29,9 +29,9 @@ int main(void)
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
   long numIt = 4e9;
-  float hilosTotales = blocksPerGrid*threadsPerBlock;
-  float operacionPorHilo;
-  operacionPorHilo = (numIt > hilosTotales ) ? ( ceil(numIt/hilosTotales) ) : 1;
+  int hilosTotales = blocksPerGrid*threadsPerBlock;
+  int operacionPorHilo;
+  operacionPorHilo = (numIt > hilosTotales ) ? (int)(ceil(numIt/(float)hilosTotales) ) : 1;
   float *h_pi = (float*)malloc(size);
   *h_pi = 0;
   float *d_pi = NULL;
@@ -52,7 +52,7 @@ int main(void)
   }
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
-  printf("Operaciones por Hilo %f\n",operacionPorHilo);
+  printf("Operaciones por Hilo %d\n",operacionPorHilo);
   calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_pi, numIt,operacionPorHilo);
   err = cudaGetLastError();
 
