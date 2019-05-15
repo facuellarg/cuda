@@ -19,7 +19,8 @@ int main(void)
 {
   // declarar  la cantidad de hilos segun la gpu
   cudaError_t err = cudaSuccess;
-	int dev = 0;
+  int dev = 0;
+  size_t size = sizeof(float);
 	cudaSetDevice(dev);
   cudaDeviceProp deviceProp;
 	cudaGetDeviceProperties(&deviceProp, dev);
@@ -31,10 +32,18 @@ int main(void)
   int operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? (( numIt / hilosTotales ) + 1 ) : 1;
   float *h_pi, *d_pi;
-  // h_pi = 0;
-  // d_pi = 0;
+  float *h_pi = (float)malloc(size);
+  *h_pi = 0;
+  float *d_pi = NULL;
+  err = cudaMalloc((void *)&d_pi, size);
+  if (err != cudaSuccess)
+  {
+      fprintf(stderr, "Failed to allocate device d_pi (error code %s)!\n", cudaGetErrorString(err));
+      exit(EXIT_FAILURE);
+  }
 
-  err = cudaMemcpy(d_pi, h_pi, sizeof(float), cudaMemcpyHostToDevice);
+
+  err = cudaMemcpy(d_pi, h_pi, size, cudaMemcpyHostToDevice);
 
   if (err != cudaSuccess)
   {
