@@ -8,14 +8,14 @@
 __global__ void
 calcularPi(float *pi, int operaciones)
 {
-  double i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
+  float i = ((blockDim.x * blockIdx.x + threadIdx.x)*operaciones);
   
 	for(int j = 0; j < operaciones; j++){
     i = i + j;
     if(i < 10){
-      printf("En %f valor %d\n",i,(2/((4*(i) + 1)*(4*(i) + 3))));
+      printf("En %f valor %d\n",i,(2/((4*i + 1)*(4*i + 3))));
     }
-    *pi = *pi + (2/((4*(i) + 1)*(4*(i) + 3)));
+    *pi = *pi + (2/((4*i + 1)*(4*i + 3)));
 	}
     
 }
@@ -32,6 +32,7 @@ int main(void)
 	threadsPerBlock = threadsPerBlock*2;
   int blocksPerGrid =   deviceProp.multiProcessorCount;
   int numIt = 4e8;
+  printf("valor inicial%d\n", numIt);
   int hilosTotales = blocksPerGrid*threadsPerBlock;
   int operacionPorHilo;
   operacionPorHilo = (numIt > hilosTotales ) ? (int)(ceil(numIt/(float)hilosTotales) ) : 1;
