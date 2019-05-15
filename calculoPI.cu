@@ -76,7 +76,7 @@ int main(void)
 
   printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
   printf("Operaciones por Hilo %d\n",operacionPorHilo);
-  calcularPi<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
+  calcularPi2<<<blocksPerGrid, threadsPerBlock>>>(d_sum, operacionPorHilo);
   err = cudaGetLastError();
 
   if (err != cudaSuccess)
