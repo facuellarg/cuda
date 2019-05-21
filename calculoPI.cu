@@ -37,7 +37,7 @@ calcularPi( float *sum, int operaciones, int t)
    if (i < total ){
      sum[i] = 0;
      for(int j = 0; j < op; j++ ){
-       sum[i] += (1.0/(4.0*(i+j)+1) - 1/(4.0*(i+j)+3);// 1.0/)2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
+       sum[i] += 1.0/(4.0*(i+j)+1) - 1/(4.0*(i+j)+3);// 1.0/)2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
      }
    }
  }
