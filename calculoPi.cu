@@ -33,9 +33,10 @@ calcularPi( float *sum, int operaciones, int t)
  {
   	int i = ((blockDim.x * blockIdx.x + threadIdx.x));
 	int total = t; 
+	int op = operaciones;
    if (i < total ){
      sum[i] = 0;
-     for(int j = 0; j < operaciones; j++ ){
+     for(int j = 0; j < op; j++ ){
        sum[i] += 2.0/((4.0*(i+j)+1)*(4.0*(i+j)+3));
      }
    }
