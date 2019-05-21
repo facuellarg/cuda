@@ -8,19 +8,25 @@
 __global__ void
 calcularPi( float *sum, int operaciones, int t)
 {
- 	int i = ((blockDim.x * blockIdx.x + threadIdx.x));
-	if (i < t){
-		int acum = 0;
-		for(int j = 0; j < operaciones; j=j+4 ){
-			int n = i + j ;
-			if (n == 0 ) n++;
-			acum += 1.0/(n);
-			n =n+2;
-			acum -= 1.0/(n);
-		}
-		sum[i] = acum;
-	}
-  
+  int i = ((blockDim.x * blockIdx.x + threadIdx.x));
+  if (i < t){
+
+    sum[i] = 0;
+    if (i % 2 == 0){
+      for(int j = 0; j < operaciones; j=j+2 ){
+        if ((i+j) == 0 ) j++;
+        sum[i] += 1.0/(i + j);
+        j =j+2;
+        sum[i] -= 1.0/(i + j);
+      }
+    }else{
+      for(int j = 0; j < operaciones; j=j+2 ){
+        sum[i] -= 1.0/(i + j);
+        j =j+2;
+        sum[i] += 1.0/(i + j);
+      }
+    } 
+  } 
 }
 
  /*__global__ void
