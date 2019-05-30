@@ -35,7 +35,8 @@ int NUM_THREADS;
 blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size)
 {
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
-    if( index < size ){
+    if( index < size )
+    {
         int i = index / width;// fila
         int j = index % width;//columna
         double redTemp = 0;
@@ -187,16 +188,16 @@ void write_output(char *text)
     fclose(file);
 }
 
-double **createKernel(int tamaño)
+double **createKernel(int tamanio)
 {
-    double **matriz = (double **)malloc(tamaño * sizeof(double *));
-    for (int i = 0; i < tamaño; i++)
-        matriz[i] = (double *)malloc(tamaño * sizeof(double));
-    int radio = floor(tamaño / 2);
+    double **matriz = (double **)malloc(tamanio * sizeof(double *));
+    for (int i = 0; i < tamanio; i++)
+        matriz[i] = (double *)malloc(tamanio * sizeof(double));
+    int radio = floor(tamanio / 2);
     double sigma = radio * radio;
-    for (int fila = 0; fila < tamaño; fila++)
+    for (int fila = 0; fila < tamanio; fila++)
     {
-        for (int columna = 0; columna < tamaño; columna++)
+        for (int columna = 0; columna < tamanio; columna++)
         {
             double square = (columna - radio) * (columna - radio) + (fila - radio) * (fila - radio);
             double weight = (exp(-square / (2 * sigma))) / (3.14159264 * 2 * sigma);
@@ -250,8 +251,8 @@ int main(int argc, char *argv[])
     cudaGetDeviceProperties(&deviceProp, dev);
     int blocksPerGrid =   deviceProp.multiProcessorCount;
 //-------------------------------------------------
-    int tamaño = atoi(argv[2]);
-    char radio = floor(tamaño / 2);
+    int tamanio = atoi(argv[2]);
+    char radio = floor(tamanio / 2);
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
@@ -268,7 +269,7 @@ int main(int argc, char *argv[])
     }
     getChannels();
     double **kernel;
-    kernel = createKernel(tamaño);
+    kernel = createKernel(tamanio);
     
     //Asignacion de memoria para cuda
     
