@@ -30,34 +30,35 @@ png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
-int NUM_THREADS;
  __global__ void
-blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size)
+blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size, int operationPerThread)
 {
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     if( index < size )
     {
-        int i = index / width;// fila
-        int j = index % width;//columna
-        double redTemp = 0;
-        double greenTemp = 0;
-        double blueTemp = 0;
-        double acum = 0;
-        for (int row = i - radius * width; row < i + radius * width + (sizeof(kernel)%2); row = row + radius*width )
-        {
-            int y = row < 0 ? 0 : row < height ? row : height - 1;
-            for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
+        for(int count = 0; count < operationPerThread; count ++){
+            int i = (index + count) / width;// fila
+            int j = (index + count) % width;//columna
+            double redTemp = 0;
+            double greenTemp = 0;
+            double blueTemp = 0;
+            double acum = 0;
+            for (int row = i - radius * width; row < i + radius * width + (sizeof(kernel)%2); row = row + radius*width )
             {
-                int x = column < 0 ? 0 : column < width ? column : width - 1;
-                redTemp += r[y*width + x] * kernel[y - i + radius][x - j + radius];
-                greenTemp += g[y*width + x] * kernel[y - i + radius][x - j + radius];
-                blueTemp += b[y*width + x] * kernel[y - i + radius][x - j + radius];
-                acum += kernel[y - i + radius][x - j + radius];
+                int y = row < 0 ? 0 : row < height ? row : height - 1;
+                for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
+                {
+                    int x = column < 0 ? 0 : column < width ? column : width - 1;
+                    redTemp += r[y*width + x] * kernel[y - i + radius][x - j + radius];
+                    greenTemp += g[y*width + x] * kernel[y - i + radius][x - j + radius];
+                    blueTemp += b[y*width + x] * kernel[y - i + radius][x - j + radius];
+                    acum += kernel[y - i + radius][x - j + radius];
+                }
             }
+            r[i*width + j] = round(redTemp / acum);
+            g[i*width + j] = round(greenTemp / acum);
+            b[i*width + j] = round(blueTemp / acum);
         }
-        r[i*width + j] = round(redTemp / acum);
-        g[i*width + j] = round(greenTemp / acum);
-        b[i*width + j] = round(blueTemp / acum);
     }
 }
 
@@ -249,6 +250,8 @@ int main(int argc, char *argv[])
     cudaSetDevice(dev);
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
+    int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
+	threadsPerBlock = threadsPerBlock*2;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
 //-------------------------------------------------
     int tamanio = atoi(argv[2]);
@@ -256,8 +259,7 @@ int main(int argc, char *argv[])
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    NUM_THREADS = height * width;
-    size = NUM_THREADS*sizeof(char);
+    size = height * width*sizeof(char);
     // Asignar memoria para cpu
     h_R = (char *)malloc(height * width * sizeof(char));
     h_B = (char *)malloc(height * width * sizeof(char));
@@ -316,8 +318,10 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
-    printf("launched  threads per block%d\n",( NUM_THREADS/blocksPerGrid));
-    blurEffect<<<blocksPerGrid,( NUM_THREADS/blocksPerGrid) >>>(kernel, height, width, d_R, d_G, d_B, radio, height*width);
+    printf("launched  threads per block%d\n",( threadsPerBlock));
+
+    int opt = (int)ceil(height * width/ (threadsPerBlock*blocksPerGrid));
+    blurEffect<<<blocksPerGrid,threadsPerBlock) >>>(kernel, height, width, d_R, d_G, d_B, radio, height*width, opt);
     err = cudaGetLastError();
 
     if (err != cudaSuccess)
@@ -337,7 +341,7 @@ int main(int argc, char *argv[])
     sprintf(tiempo, "%f", elapsed_time.tv_sec + elapsed_time.tv_usec / 1000000.0);
     write_png_file(argv[2]);
     char text_otuput[100];
-    sprintf(text_otuput, "fopenMP\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", NUM_THREADS, argv[3], width, tiempo);
+    sprintf(text_otuput, "fopenMP\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", threadsPerBlock, argv[3], width, tiempo);
     write_output(text_otuput);
 
     return 0;
