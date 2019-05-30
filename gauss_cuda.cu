@@ -15,7 +15,8 @@
  * of the X11 license.
  * /usr/local/opt/llvm/bin/clang -lz -lpng16  gauss_omp.c -fopenmp -o gauss-omp
  */
-
+#include <cuda_runtime.h>
+#include <helper_cuda.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "math.h"
@@ -24,12 +25,14 @@
 
 int width, height;
 char *d_R, *d_G, *d_B;
+char *h_R, *h_G, *h_B;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
+size_t size;
 int NUM_THREADS;
  __global__ void
-blurEffect(double **kernel, int width, int height, char *r, char *b, char *g, char radius, int size)
+blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size)
 {
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     if( index < size ){
@@ -212,9 +215,9 @@ void getChannels()
         for (int j = 0; j < width; j++)
         {
             png_bytep px = &(row[j * 4]);
-            d_R[i * width + j] = px[0];
-            d_G[i * width + j] = px[1];
-            d_B[i * width + j] = px[2];
+            h_R[i * width + j] = px[0];
+            h_G[i * width + j] = px[1];
+            h_B[i * width + j] = px[2];
         }
     }
 }
@@ -227,9 +230,9 @@ void makeRowPointer()
         for (int j = 0; j < width; j++)
         {
             png_bytep px = &(row[j * 4]);
-            px[0] = d_R[i * width + j];
-            px[1] = d_G[i * width + j];
-            px[2] = d_B[i * width + j];
+            px[0] = h_R[i * width + j];
+            px[1] = h_G[i * width + j];
+            px[2] = h_B[i * width + j];
         }
     }
 }
@@ -237,25 +240,91 @@ int main(int argc, char *argv[])
 {
 
     if (argc != 4)
-        abort();
-
+        abort();  
+    cudaError_t err = cudaSuccess;
+// declarar  la cantidad de hilos segun la gpu
+//-------------------------------------------------
+    int dev = 0;
+    size_t size = sizeof(float);
+    cudaSetDevice(dev);
+    cudaDeviceProp deviceProp;
+    cudaGetDeviceProperties(&deviceProp, dev);
+    int blocksPerGrid =   deviceProp.multiProcessorCount;
+//-------------------------------------------------
     int tamaño = atoi(argv[2]);
-    int radio = floor(tamaño / 2);
-
+    char radio = floor(tamaño / 2);
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
     NUM_THREADS = height * weight;
-    int heightHilos = height;
-    d_R = (char *)malloc(height * width * sizeof(char));
-    d_B = (char *)malloc(height * width * sizeof(char));
-    d_G = (char *)malloc(height * width * sizeof(char));
+    size = NUM_THREADS*sizeof(char);
+    // Asignar memoria para cpu
+    h_R = (char *)malloc(height * width * sizeof(char));
+    h_B = (char *)malloc(height * width * sizeof(char));
+    h_G = (char *)malloc(height * width * sizeof(char));
+    if (h_R == NULL || h_B == NULL || h_G == NULL)
+    {
+        fprintf(stderr, "Failed to allocate host vectors!\n");
+        exit(EXIT_FAILURE);
+    }
     getChannels();
-    int i, j;
-
     double **kernel;
     kernel = createKernel(tamaño);
     
+    //Asignacion de memoria para cuda
+    
+    err = cudaMalloc((void **)&d_R, size);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    err = cudaMalloc((void **)&d_G, size);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    err = cudaMalloc((void **)&d_B, size);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    //Copiar memoria de host a device
+    err = cudaMemcpy(d_R, h_R, size, cudaMemcpyHostToDevice);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to copy vector R from host to device (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    err = cudaMemcpy(d_G, h_G, size, cudaMemcpyHostToDevice);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to copy vector G from host to device (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    err = cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to copy vector B from host to device (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    blurEffect<<<blocksPerGrid,ceil( NUM_THREADS/blocksPerGrid) >>>(kernel, height, width, d_R, d_G, d_B, radio, height*width);
+    err = cudaGetLastError();
+
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to launch vectorAdd kernel (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
 
     for (int i = 0; i < tamaño; i++)
         free(kernel[i]);
