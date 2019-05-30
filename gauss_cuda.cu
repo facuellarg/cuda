@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
 // declarar  la cantidad de hilos segun la gpu
 //-------------------------------------------------
     int dev = 0;
-    size_t size = sizeof(float);
+    
     cudaSetDevice(dev);
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    size = height * width*sizeof(char);
+    size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
     h_R = (char *)malloc(height * width * sizeof(char));
     h_B = (char *)malloc(height * width * sizeof(char));
