@@ -56,6 +56,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
                 }
             }
             r[i*width + j] = round(redTemp / acum);
+            printf("%f\n",kernel[y - i + radius][x - j + radius]);
             g[i*width + j] = round(greenTemp / acum);
             b[i*width + j] = round(blueTemp / acum);
         }
