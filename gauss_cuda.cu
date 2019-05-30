@@ -1,67 +1,266 @@
+/*
+ * A simple libpng example program
+ * http://zarb.org/~gc/html/libpng.html
+ *
+ * Modified by Yoshimasa Niwa to make it much simpler
+ * and support all defined color_type.
+ *
+ * To build, use the next instruction on OS X.
+ * $ brew install libpng
+ * $ clang -lz -lpng15 libpng_test.c
+ *
+ * Copyright 2002-2010 Guillaume Cottenceau.
+ *
+ * This software may be freely redistributed under the terms
+ * of the X11 license.
+ * /usr/local/opt/llvm/bin/clang -lz -lpng16  gauss_omp.c -fopenmp -o gauss-omp
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "math.h"
 #include "png.h"
+#include <sys/time.h>
 
-
-
+int width, height;
+char *d_R, *d_G, *d_B;
 png_byte color_type;
-
-
-
-int main(int argc, char *argv[])
+png_byte bit_depth;
+png_bytep *row_pointers;
+int NUM_THREADS;
+ __global__ void
+blurEffect(double **kernel, int width, int height, char *r, char *b, char *g, char radius, int size)
 {
-    if (argc != 5)
+    int index = ((blockDim.x * blockIdx.x + threadIdx.x));
+    if( index < size ){
+        int i = index / weight;// fila
+        int j = index % weight;//columna
+        double redTemp = 0;
+        double greenTemp = 0;
+        double blueTemp = 0;
+        double acum = 0;
+        for (int row = i - radius*width; row < i + radius*width + (tamaño%2); row= row + radius*width)
+        {
+            int y = row < 0 ? 0 : row < height ? row : height - 1;
+            for (int column = j - radius; column < j + radius + (tamaño % 2); column++)
+            {
+                int x = column < 0 ? 0 : column < width ? column : width - 1;
+                kernel[y - i + radius][x - j + radius];
+                redTemp += r[y*width + x] * kernel[y - i + radius][x - j + radius];
+                greenTemp += g[y*width + x] * kernel[y - i + radius][x - j + radius];
+                blueTemp += b[y*width + x] * kernel[y - i + radius][x - j + radius];
+                acum += kernel[y - i + radius][x - j + radius];
+            }
+        }
+        r[i*width + j] = round(redTemp / acum);
+        g[i*width + j] = round(greenTemp / acum);
+        b[i*width + j] = round(blueTemp / acum);
+    }
+}
+
+void read_png_file(char *filename)
+{
+
+    FILE *fp = fopen(filename, "rb");
+
+    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png)
         abort();
-    int tamaño = atoi(argv[3]);
+
+    png_infop info = png_create_info_struct(png);
+    if (!info)
+        abort();
+
+    if (setjmp(png_jmpbuf(png)))
+        abort();
+
+    png_init_io(png, fp);
+
+    png_read_info(png, info);
+
+    width = png_get_image_width(png, info);
+    height = png_get_image_height(png, info);
+    color_type = png_get_color_type(png, info);
+    bit_depth = png_get_bit_depth(png, info);
+
+    // Read any color_type into 8bit depth, RGBA format.
+    // See http://www.libpng.org/pub/png/libpng-manual.txt
+
+    if (bit_depth == 16)
+        png_set_strip_16(png);
+
+    if (color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_palette_to_rgb(png);
+
+    // PNG_COLOR_TYPE_GRAY_ALPHA is always 8 or 16bit depth.
+    if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+        png_set_expand_gray_1_2_4_to_8(png);
+
+    if (png_get_valid(png, info, PNG_INFO_tRNS))
+        png_set_tRNS_to_alpha(png);
+
+    // These color_type don't have an alpha channel then fill it with 0xff.
+    if (color_type == PNG_COLOR_TYPE_RGB ||
+        color_type == PNG_COLOR_TYPE_GRAY ||
+        color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
+
+    if (color_type == PNG_COLOR_TYPE_GRAY ||
+        color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+        png_set_gray_to_rgb(png);
+
+    png_read_update_info(png, info);
+
+    row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * height);
+    for (int y = 0; y < height; y++)
+    {
+        row_pointers[y] = (png_byte *)malloc(png_get_rowbytes(png, info));
+    }
+
+    png_read_image(png, row_pointers);
+
+    fclose(fp);
+}
+
+void write_png_file(char *filename)
+{
+    int y;
+
+    FILE *fp = fopen(filename, "wb");
+    if (!fp)
+        abort();
+
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png)
+        abort();
+
+    png_infop info = png_create_info_struct(png);
+    if (!info)
+        abort();
+
+    if (setjmp(png_jmpbuf(png)))
+        abort();
+
+    png_init_io(png, fp);
+
+    // Output is 8bit depth, RGBA format.
+    png_set_IHDR(
+        png,
+        info,
+        width, height,
+        8,
+        PNG_COLOR_TYPE_RGBA,
+        PNG_INTERLACE_NONE,
+        PNG_COMPRESSION_TYPE_DEFAULT,
+        PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png, info);
+
+    // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
+    // Use png_set_filler().
+    //png_set_filler(png, 0, PNG_FILLER_AFTER);
+
+    png_write_image(png, row_pointers);
+    png_write_end(png, NULL);
+
+    for (int y = 0; y < height; y++)
+    {
+        free(row_pointers[y]);
+    }
+    free(row_pointers);
+
+    fclose(fp);
+}
+void write_output(char *text)
+{
+    FILE *file;
+
+    file = fopen("gauss_blur.txt", "a");
+    if (file == NULL)
+    {
+        /* File not created hence exit */
+        printf("Unable to create file.\n");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(file, "%s\n", text);
+    fclose(file);
+}
+
+double **createKernel(int tamaño)
+{
+    double **matriz = (double **)malloc(tamaño * sizeof(double *));
+    for (int i = 0; i < tamaño; i++)
+        matriz[i] = (double *)malloc(tamaño * sizeof(double));
     int radio = floor(tamaño / 2);
     double sigma = radio * radio;
+    for (int fila = 0; fila < tamaño; fila++)
+    {
+        for (int columna = 0; columna < tamaño; columna++)
+        {
+            double square = (columna - radio) * (columna - radio) + (fila - radio) * (fila - radio);
+            double weight = (exp(-square / (2 * sigma))) / (3.14159264 * 2 * sigma);
+            matriz[fila][columna] = weight;
+        }
+    }
+    return matriz;
+}
+
+void getChannels()
+{
+    for (int i = 0; i < height; i++)
+    {
+        png_bytep row = row_pointers[i];
+        for (int j = 0; j < width; j++)
+        {
+            png_bytep px = &(row[j * 4]);
+            d_R[i * width + j] = px[0];
+            d_G[i * width + j] = px[1];
+            d_B[i * width + j] = px[2];
+        }
+    }
+}
+
+void makeRowPointer()
+{
+    for (int i = 0; i < height; i++)
+    {
+        png_bytep row = row_pointers[i];
+        for (int j = 0; j < width; j++)
+        {
+            png_bytep px = &(row[j * 4]);
+            px[0] = d_R[i * width + j];
+            px[1] = d_G[i * width + j];
+            px[2] = d_B[i * width + j];
+        }
+    }
+}
+int main(int argc, char *argv[])
+{
+
+    if (argc != 4)
+        abort();
+
+    int tamaño = atoi(argv[2]);
+    int radio = floor(tamaño / 2);
+
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    int cantidad_hilos = atoi(argv[4]);
+    NUM_THREADS = height * weight;
     int heightHilos = height;
-    omp_set_num_threads(cantidad_hilos);
+    d_R = (char *)malloc(height * width * sizeof(char));
+    d_B = (char *)malloc(height * width * sizeof(char));
+    d_G = (char *)malloc(height * width * sizeof(char));
+    getChannels();
     int i, j;
 
     double **kernel;
     kernel = createKernel(tamaño);
-#pragma omp parallel for private(i, j)
-    for (i = 0; i < height; i++)
-    {
-        png_bytep row = row_pointers[i];
-        for (j = 0; j < width; j++)
-        {
-            png_bytep px = &(row[j * 4]);
-            double redTemp = 0;
-            double greenTemp = 0;
-            double blueTemp = 0;
-            double acum = 0;
-            for (int fila = i - radio; fila < i + radio + (tamaño%2); fila++)
-            {
-                int y = fila < 0 ? 0 : fila < heightHilos ? fila : heightHilos - 1;
-                png_bytep rowKernel = row_pointers[y];
-                for (int columna = j - radio; columna < j + radio + (tamaño % 2); columna++)
-                {
-                    int x = columna < 0 ? 0 : columna < width ? columna : width - 1;
-                    double weight = kernel[y - i + radio][x - j + radio];
-                    png_bytep pxt = &(rowKernel[x * 4]);
-                    redTemp += pxt[0] * weight;
-                    greenTemp += pxt[1] * weight;
-                    blueTemp += pxt[2] * weight;
-                    acum += weight;
-                }
-            }
+    
 
-            px[0] = round(redTemp / acum);
-            px[1] = round(greenTemp / acum);
-            px[2] = round(blueTemp / acum);
-        }
-    }
     for (int i = 0; i < tamaño; i++)
         free(kernel[i]);
     free(kernel);
+    makeRowPointer();
     gettimeofday(&stop_time, NULL);
     timersub(&stop_time, &start_time, &elapsed_time);
     char tiempo[10];
