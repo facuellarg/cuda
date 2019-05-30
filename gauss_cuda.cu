@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     getChannels();
     double **kernel;
     kernel = createKernel(tamanio);
-    printf(sizeof(kernel));
+    printf("%lu",sizeof(kernel));
     //Asignacion de memoria para cuda
     
     err = cudaMalloc((void **)&d_R, size);
