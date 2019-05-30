@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
     
 //-------------------------------------------------
     int tamanio = atoi(argv[2]);
-    char radio = floor(tamanio / 2);
+    char radio = (char)floor(tamanio / 2);
     read_png_file(argv[1]);
     int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
