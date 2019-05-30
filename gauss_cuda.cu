@@ -41,6 +41,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
         for(int count = 0; count < operationPerThread; count ++){
             int i = (index + count) / width;// fila
             int j = (index + count) % width;//columna
+            printf("j %d", j);
             double redTemp = 0;
             double greenTemp = 0;
             double blueTemp = 0;
@@ -54,7 +55,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
                 for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
                 {
                     int x = column < 0 ? 0 : column < width ? column : width - 1;
-                    printf("%d i %d j\n",y - i + radius,x - j + radius);
+                    
                     
                     redTemp += r[y*width + x] * kernel[y - i + radius][x - j + radius];
                     greenTemp += g[y*width + x] * kernel[y - i + radius][x - j + radius];
