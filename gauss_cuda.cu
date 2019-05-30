@@ -45,7 +45,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             double greenTemp = 0;
             double blueTemp = 0;
             double acum = 0;
-            printf("i %d radio %d width %d kernel %d\n",i, radius,width,(sizeof(kernel)));
+            printf("i %d radio %d width %d kernel %lu\n",i, radius,width,(sizeof(kernel)));
             
             for (int row = i - radius ; row < i + radius * width + (sizeof(kernel)%2); row++ )
             {
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     getChannels();
     double **kernel;
     kernel = createKernel(tamanio);
-    printf("%lu",sizeof(kernel));
+    
     //Asignacion de memoria para cuda
     
     err = cudaMalloc((void **)&d_R, size);
