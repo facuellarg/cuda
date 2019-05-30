@@ -254,11 +254,12 @@ int main(int argc, char *argv[])
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
-    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
+    
 //-------------------------------------------------
     int tamanio = atoi(argv[2]);
     char radio = floor(tamanio / 2);
     read_png_file(argv[1]);
+    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(char);
