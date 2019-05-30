@@ -254,6 +254,7 @@ int main(int argc, char *argv[])
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 	threadsPerBlock = threadsPerBlock*2;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
+    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
 //-------------------------------------------------
     int tamanio = atoi(argv[2]);
     char radio = floor(tamanio / 2);
@@ -318,10 +319,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Failed to copy vector B from host to device (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
+    
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
     printf("launched  threads per block%d\n",( threadsPerBlock));
+    printf("operation per thread ∞d\n",opt);
 
-    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
+    
     //Se lanza el kernel
     blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, (int)(height*width), opt);
     err = cudaGetLastError();
