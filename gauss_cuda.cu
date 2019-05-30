@@ -36,16 +36,16 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
 {
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     if( index < size ){
-        int i = index / weight;// fila
-        int j = index % weight;//columna
+        int i = index / width;// fila
+        int j = index % width;//columna
         double redTemp = 0;
         double greenTemp = 0;
         double blueTemp = 0;
         double acum = 0;
-        for (int row = i - radius*width; row < i + radius*width + (tamaño%2); row= row + radius*width)
+        for (int row = i - radius * width; row < i + radius * width + (sizeof(kernel)%2); row = row + radius*width )
         {
             int y = row < 0 ? 0 : row < height ? row : height - 1;
-            for (int column = j - radius; column < j + radius + (tamaño % 2); column++)
+            for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
             {
                 int x = column < 0 ? 0 : column < width ? column : width - 1;
                 kernel[y - i + radius][x - j + radius];
