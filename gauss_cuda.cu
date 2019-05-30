@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
     
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
     printf("launched  threads per block%d\n",( threadsPerBlock));
-    printf("operation per thread ∞d\n",opt);
+    printf("operation per thread %d\n",opt);
 
     
     //Se lanza el kernel
