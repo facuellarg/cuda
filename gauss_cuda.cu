@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
     printf("launched  threads per block%d\n",( threadsPerBlock));
 
     int opt = (int)ceil(height * width/ (threadsPerBlock*blocksPerGrid));
-    blurEffect<<<blocksPerGrid,threadsPerBlock) >>>(kernel, height, width, d_R, d_G, d_B, radio, height*width, opt);
+    blurEffect<<<(blocksPerGrid,threadsPerBlock)>>> (kernel, height, width, d_R, d_G, d_B, radio, height*width, opt);
     err = cudaGetLastError();
 
     if (err != cudaSuccess)
