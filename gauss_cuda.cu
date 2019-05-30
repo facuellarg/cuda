@@ -43,7 +43,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             double greenTemp = 0;
             double blueTemp = 0;
             double acum = 0;
-            for (int row = i - radius * width; row < i + radius * width + (sizeof(kernel)%2); row = row + radius*width )
+            for (int row = i - radius * width; row < i + radius * width + (sizeof(kernel)%2); row = row + width )
             {
                 int y = row < 0 ? 0 : row < height ? row : height - 1;
                 for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
