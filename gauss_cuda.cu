@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
-    printf("launched  threads per block%d\n",ceil( NUM_THREADS/blocksPerGrid));
+    printf("launched  threads per block%d\n",( NUM_THREADS/blocksPerGrid));
     blurEffect<<<blocksPerGrid,( NUM_THREADS/blocksPerGrid) >>>(kernel, height, width, d_R, d_G, d_B, radio, height*width);
     err = cudaGetLastError();
 
