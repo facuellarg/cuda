@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     read_png_file(argv[1]);
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    NUM_THREADS = height * weight;
+    NUM_THREADS = height * width;
     size = NUM_THREADS*sizeof(char);
     // Asignar memoria para cpu
     h_R = (char *)malloc(height * width * sizeof(char));
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
     }
 
 
-    for (int i = 0; i < tamaño; i++)
+    for (int i = 0; i < tamanio; i++)
         free(kernel[i]);
     free(kernel);
     makeRowPointer();
@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
     sprintf(tiempo, "%f", elapsed_time.tv_sec + elapsed_time.tv_usec / 1000000.0);
     write_png_file(argv[2]);
     char text_otuput[100];
-    sprintf(text_otuput, "fopenMP\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", cantidad_hilos, argv[3], width, tiempo);
+    sprintf(text_otuput, "fopenMP\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", NUM_THREADS, argv[3], width, tiempo);
     write_output(text_otuput);
 
     return 0;
