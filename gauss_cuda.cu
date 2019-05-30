@@ -321,15 +321,41 @@ int main(int argc, char *argv[])
     printf("launched  threads per block%d\n",( threadsPerBlock));
 
     int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
+    //Se lanza el kernel
     blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, (int)(height*width), opt);
     err = cudaGetLastError();
-
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to launch vectorAdd kernel (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
 
+
+    // Copy the device result vector in device memory to the host result vector
+    // in host memory.
+    printf("Copy output data from the CUDA device to the host memory\n");
+    err = cudaMemcpy(h_R, d_R, size, cudaMemcpyDeviceToHost);
+    if (err != cudaSuccess)
+    {    
+        fprintf(stderr, "Failed to copy vector R from device to host (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    
+    err = cudaMemcpy(h_G, d_G, size, cudaMemcpyDeviceToHost);
+    if (err != cudaSuccess)
+    {    
+        fprintf(stderr, "Failed to copy vector G from device to host (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    
+    err = cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost);
+    if (err != cudaSuccess)
+    {    
+        fprintf(stderr, "Failed to copy vector B from device to host (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < tamanio; i++)
         free(kernel[i]);
