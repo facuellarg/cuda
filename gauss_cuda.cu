@@ -31,7 +31,7 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size, int operationPerThread)
+blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, int radius, int size, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
     
 //-------------------------------------------------
     int tamanio = atoi(argv[2]);
-    char radio = (char)floor(tamanio / 2);
+    int radio = floor(tamanio / 2);
     read_png_file(argv[1]);
     int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
