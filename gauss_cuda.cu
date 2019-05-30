@@ -45,9 +45,9 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             double greenTemp = 0;
             double blueTemp = 0;
             double acum = 0;
-            printf("i %d radio %d width %d kernel %lu\n",i, radius,width,(sizeof(kernel)));
             
-            for (int row = i - radius ; row < i + radius * width + (sizeof(kernel)%2); row++ )
+            
+            for (int row = (i - radius) ; row < (i + radius * width + ((int)(sizeof(kernel)-1)%2)); row++ )
             {
                 int y = row < 0 ? 0 : row < height ? row : height - 1;
                 printf("y %d\n",y);
