@@ -33,6 +33,7 @@ size_t size;
  __global__ void
 blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size, int operationPerThread)
 {
+    printf("size %d\n",(size));
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     if( index < size )
     {
