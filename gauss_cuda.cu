@@ -274,18 +274,22 @@ int main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
-    h_R = (char *)malloc(height * width * sizeof(char));
-    h_B = (char *)malloc(height * width * sizeof(char));
-    h_G = (char *)malloc(height * width * sizeof(char));
+    printf("alto %d, ancho %d\n", height,width)
+    h_R = (char *)malloc( (height * width) * sizeof(char));
+    h_B = (char *)malloc( (height * width) * sizeof(char));
+    h_G = (char *)malloc( (height * width) * sizeof(char));
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
         fprintf(stderr, "Failed to allocate host vectors!\n");
         exit(EXIT_FAILURE);
     }
     getChannels();
-    for(int i = 0 ; i < (int)sizeof(h_R); i++){
-        printf("val de r %d\n", (int)sizeof(h_G));
-    }
+    
+    printf("val de r %d\n", (int)sizeof(h_R));
+    printf("val de g %d\n", (int)sizeof(h_G));
+    printf("val de b %d\n", (int)sizeof(h_B));
+
+    
     double **kernel;
     kernel = createKernel(tamanio);
     
