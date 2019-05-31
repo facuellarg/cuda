@@ -36,6 +36,7 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
+    printf("%d\n", d_R[0]);
     
     if( index < size )
     {
@@ -259,7 +260,6 @@ int main(int argc, char *argv[])
 // declarar  la cantidad de hilos segun la gpu
 //-------------------------------------------------
     int dev = 0;
-    
     cudaSetDevice(dev);
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
