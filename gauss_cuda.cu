@@ -278,6 +278,7 @@ int main(int argc, char *argv[])
     h_R = (char *)malloc( (height * width) * sizeof(char));
     h_B = (char *)malloc( (height * width) * sizeof(char));
     h_G = (char *)malloc( (height * width) * sizeof(char));
+    printf("val de g %d\n", (int)sizeof(h_G));
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
         fprintf(stderr, "Failed to allocate host vectors!\n");
