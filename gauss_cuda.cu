@@ -67,9 +67,9 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                 }
             }
 
-            d_R[index] = 255;
-            d_G[index] = 255;
-            d_B[index] = 255;
+            d_R[index] = redTemp/acum;
+            d_G[index] = redTemp/acum;
+            d_B[index] = redTemp/acum;
         }
     }
 }
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
     read_png_file(argv[1]);
-    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
+    int opt = (int)(ceil(height * width/ (threadsPerBlock)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(unsigned char);
