@@ -39,28 +39,26 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
     if( index < size )
     {
         for(int count = 0; count < operationPerThread; count ++){
-            int i = (index + count) / width;// fila
-            int j = (index + count) % width;//columna
-            printf("j %d", j);
+            int i = (index + count) / width;// fila del pixel al que se le hara gauss
+            int j = (index + count) % width;//columna del pixel al que se le hara gauss
             double redTemp = 0;
             double greenTemp = 0;
             double blueTemp = 0;
             double acum = 0;
             
             
-            for (int row = (i - radius) ; row < (i + radius * width + ((int)(sizeof(kernel)-1)%2)); row++ )
+            for (int k = 0 ; k < (int)sizeof(kernek; k++ )
             {
-                int y = row < 0 ? 0 : row < height ? row : height - 1;
-                
-                for (int column = j - radius; column < j + radius + (sizeof(kernel) % 2); column++)
+                int y = i - radius + k;
+                y = y < 0 ? 0 : y < height ? y : height - 1;
+                for (int l = 0; l < (int)sizeof(kernel); l++)
                 {
-                    int x = column < 0 ? 0 : column < width ? column : width - 1;
-                    
-                    
-                    redTemp += r[y*width + x] * kernel[y - i + radius][x - j + radius];
-                    greenTemp += g[y*width + x] * kernel[y - i + radius][x - j + radius];
-                    blueTemp += b[y*width + x] * kernel[y - i + radius][x - j + radius];
-                    acum += kernel[y - i + radius][x - j + radius];
+                    int x = j - radio + l;
+                    x = x < 0 ? 0 : x < width ? x : width - 1;
+                    redTemp += r[y*width + x] * kernel[k][l];
+                    greenTemp += g[y*width + x] * kernel[k][l];
+                    blueTemp += b[y*width + x] * kernel[k][l];
+                    acum += kernel[k][l];
                     
                 }
             }
