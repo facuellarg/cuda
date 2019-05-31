@@ -37,7 +37,7 @@ blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char 
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     
-    printf("%f\n", d_kernel[0);
+    printf("%f\n", d_kernel[0]);
     if( index < height*width )
     {
         
@@ -58,11 +58,11 @@ blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char 
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     printf("%f\n", d_kernel[k*kernelSize + l]);
-                    redTemp += d_R[y*width + x] * d_kernel[k][l];
+                    redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
                     
-                    greenTemp += d_G[y*width + x] * d_kernel[k][l];
-                    blueTemp += d_B[y*width + x] * d_kernel[k][l];
-                    acum += d_kernel[k][l];
+                    greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
+                    blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
+                    acum += d_kernel[k*kernelSize + l];
                     
                 }
             }
@@ -404,8 +404,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < tamanio; i++)
-        free(h_kernel[i]);
+  
     free(h_kernel);
     makeRowPointer();
     gettimeofday(&stop_time, NULL);
