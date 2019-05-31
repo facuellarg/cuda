@@ -50,7 +50,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             double blueTemp = 0;
             double greenTemp = 0;
             double acum = 0;
-            for (int k = 0 ; k < (int)kernelSize; k++ )
+            for (int k = 0; k < (int)kernelSize; k++ )
             {
                 int y = i - radius + k;
                 y = y < 0 ? 0 : y < height ? y : height - 1;
@@ -59,7 +59,6 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
-                    
                     greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
                     blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
