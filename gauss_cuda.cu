@@ -48,13 +48,13 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             double acum = 0;
             
             
-            for (int k = 0 ; k < (int)sizeof(kernel); k++ )
+            for (int k = 0 ; k < (int)malloc_usable_size(kernel); k++ )
             {
                 int y = i - radius + k;
                 y = y < 0 ? 0 : y < height ? y : height - 1;
                 
 
-                for (int l = 0; l < (int)sizeof(kernel); l++)
+                for (int l = 0; l < (int)malloc_usable_size(kernel); l++)
                 {
                     int x = j - radius + l;
                     
@@ -287,9 +287,7 @@ int main(int argc, char *argv[])
     }
     getChannels();
     
-    printf("val de r %d\n", h_R[height * width]);
-    printf("val de g %d\n", (int)malloc_usable_size(h_G));
-    printf("val de b %d\n", (int)malloc_usable_size(h_B));
+ 
 
     
     double **kernel;
