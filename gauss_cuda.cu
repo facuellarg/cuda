@@ -25,14 +25,14 @@
 #include <malloc.h>
 
 int width, height;
-char *d_R, *d_G, *d_B;
-char *h_R, *h_G, *h_B;
+unsigned char	 *d_R, *d_G, *d_B;
+unsigned char	 *h_R, *h_G, *h_B;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
+blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsigned char *d_G,unsigned char *d_B, int radius, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -282,11 +282,11 @@ int main(int argc, char *argv[])
     int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    size_t size = height * width*sizeof(char);
+    size_t size = height * width*sizeof(unsigned char);
     // Asignar memoria para cpu
-    h_R = (char *)malloc( size );
-    h_B = (char *)malloc(  size );
-    h_G = (char *)malloc( size );
+    h_R = (unsigned char *)malloc( size );
+    h_B = (unsigned char *)malloc(  size );
+    h_G = (unsigned char *)malloc( size );
     
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
