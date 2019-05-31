@@ -47,7 +47,6 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, i
             double blueTemp = 0;
             double acum = 0;
             
-            
             for (int k = 0 ; k < (int)kernelSize; k++ )
             {
                 int y = i - radius + k;
@@ -66,9 +65,9 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, i
                     
                 }
             }
-            r[i*width + j] = round(redTemp / acum);
-            g[i*width + j] = round(greenTemp / acum);
-            b[i*width + j] = round(blueTemp / acum);
+            r[i*width + j] = (redTemp / acum);
+            g[i*width + j] = (greenTemp / acum);
+            b[i*width + j] = (blueTemp / acum);
         }
     }
 }
