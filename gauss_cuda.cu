@@ -32,12 +32,12 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **d_kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
+blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     
-    printf("%f\n", d_kernel[0][0]);
+    printf("%f\n", d_kernel[0);
     if( index < height*width )
     {
         
@@ -57,7 +57,7 @@ blurEffect(double **d_kernel, int height, int width,  char *d_R,  char *d_G,char
                 {
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
-                    printf("%f\n", d_kernel[k][l]);
+                    printf("%f\n", d_kernel[k*kernelSize + l]);
                     redTemp += d_R[y*width + x] * d_kernel[k][l];
                     
                     greenTemp += d_G[y*width + x] * d_kernel[k][l];
@@ -220,6 +220,17 @@ double **createKernel(int tamanio)
     return matriz;
 }
 
+double *matrix_to_arr(double **M, int rows, int cols){
+    double *arr = (double *)malloc(rows * cols * sizeof(double));
+    int k = 0;
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            arr[k++] = M[i][j];
+        }
+    }
+
+    return arr;
+}
 void getChannels()
 {
     for (int i = 0; i < height; i++)
@@ -289,9 +300,9 @@ int main(int argc, char *argv[])
  
   
     
-    double **h_kernel;
-    double **d_kernel;
-    h_kernel = createKernel(tamanio);
+    double *h_kernel;
+    double *d_kernel;
+    h_kernel = matrix_to_arr(createKernel(tamanio), tamanio, tamanio);
     
     //Asignacion de memoria para cuda
     
@@ -316,7 +327,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    err = cudaMalloc((void***)&d_kernel, tamanio*tamanio*sizeof(double));
+    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
