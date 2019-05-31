@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     getChannels();
-    for(int i = 0 ; i < sizeof(h_R); i++){
+    for(int i = 0 ; i < (int)sizeof(h_R); i++){
         printf("val de r %d\n", sizeof(h_R));
     }
     double **kernel;
