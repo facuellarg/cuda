@@ -32,7 +32,7 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size, int operationPerThread)
+blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, char radius, int size, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -48,13 +48,13 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             double acum = 0;
             
             
-            for (int k = 0 ; k < (int)malloc_usable_size(kernel); k++ )
+            for (int k = 0 ; k < (int)kernelSize; k++ )
             {
                 int y = i - radius + k;
                 y = y < 0 ? 0 : y < height ? y : height - 1;
                 
 
-                for (int l = 0; l < (int)malloc_usable_size(kernel); l++)
+                for (int l = 0; l < kernelSize; l++)
                 {
                     int x = j - radius + l;
                     
@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
 
     
     //Se lanza el kernel
-    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, (int)(height*width), opt);
+    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, tamanio,(int)(height*width), opt);
     err = cudaGetLastError();
     if (err != cudaSuccess)
     {
