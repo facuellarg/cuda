@@ -27,6 +27,9 @@
 int width, height;
 unsigned char *d_R, *d_G, *d_B;
 unsigned char *h_R, *h_G, *h_B;
+unsigned char *n_R ;
+unsigned char *n_B ;
+unsigned char *n_G ;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
@@ -287,9 +290,9 @@ int main(int argc, char *argv[])
     h_R = (unsigned char *)malloc( size );
     h_B = (unsigned char *)malloc(  size );
     h_G = (unsigned char *)malloc( size );
-    unsigned char *n_R = (unsigned char *)malloc( size );
-    unsigned char *n_B = (unsigned char *)malloc(  size );
-    unsigned char *n_G = (unsigned char *)malloc( size );
+    n_R = (unsigned char *)malloc( size );
+    n_B = (unsigned char *)malloc(  size );
+    n_G = (unsigned char *)malloc( size );
     
     
     if (h_R == NULL || h_B == NULL || h_G == NULL)
