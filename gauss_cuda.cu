@@ -40,7 +40,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     
-    
+    printf("opt %d\n",operationPerThread);
     if( index < (height*width) )
     {
         for(int count = 0; count < operationPerThread; count ++){
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
     read_png_file(argv[1]);
-    int opt = (int)(ceil(height * width/ (threadsPerBlock)));
+    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(unsigned char);
