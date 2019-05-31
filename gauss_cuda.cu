@@ -288,8 +288,9 @@ int main(int argc, char *argv[])
  
   
     
-    double **kernel;
-    kernel = createKernel(tamanio);
+    double **h_kernel;
+    double **d_kernel;
+    h_kernel = createKernel(tamanio);
     
     //Asignacion de memoria para cuda
     
@@ -311,6 +312,13 @@ int main(int argc, char *argv[])
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
+
+    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double);
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
 
@@ -343,7 +351,7 @@ int main(int argc, char *argv[])
     
     //Se lanza el kernel
     //blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
-    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, tamanio, opt);
+    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(d_kernel, height, width, d_R, d_G, d_B, radio, tamanio, opt);
     err = cudaGetLastError();
     if (err != cudaSuccess)
     {
