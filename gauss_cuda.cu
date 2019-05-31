@@ -229,7 +229,7 @@ void getChannels()
             h_R[i * width + j] = (char)px[0];
             h_G[i * width + j] = (char)px[1];
             h_B[i * width + j] = (char)px[2];
-            
+
         }
     }
 }
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
     }
     getChannels();
     for(int i = 0 ; i < sizeof(h_R); i++){
-        printf("val de r %d\n", h_R[i]);
+        printf("val de r %d\n", sizeof(h_R));
     }
     double **kernel;
     kernel = createKernel(tamanio);
