@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    err = cudaMalloc((void***)&d_kernel, tamanio*tamanio*sizeof(double));
+    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
@@ -345,13 +345,12 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     
-    err = cudaMemcpy(d_kernel, h_kernel, size, cudaMemcpyHostToDevice);
+    err = cudaMemcpy(d_kernel, h_kernel, tamanio*tamanio, cudaMemcpyHostToDevice);
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to copy vector B from host to device (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
-
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
     printf("launched  threads per block%d\n",( threadsPerBlock));
     printf("operation per thread %d\n",opt);
