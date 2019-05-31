@@ -22,6 +22,7 @@
 #include "math.h"
 #include "png.h"
 #include <sys/time.h>
+#include <malloc.h>
 
 int width, height;
 char *d_R, *d_G, *d_B;
