@@ -44,9 +44,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
         for(int count = 0; count < operationPerThread; count ++){
             int i = (index + count) / width;// fila del pixel al que se le hara gauss
             int j = (index + count) % width;//columna del pixel al que se le hara gauss
-            double redTemp = 0;
-            double greenTemp = 0;
-            double blueTemp = 0;
+ 
             double acum = 0;
             for (int k = 0 ; k < (int)kernelSize; k++ )
             {
@@ -56,18 +54,18 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                 {
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
-                    redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
+                    d_R[i*width + j] += d_R[y*width + x] * d_kernel[k*kernelSize + l];
                     
-                    greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
-                    blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
+                    d_G[i*width + j] += d_G[y*width + x] * d_kernel[k*kernelSize + l];
+                    d_B[i*width + j] += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
                     
                 }
             }
             
-            d_R[i*width + j] = round(redTemp / acum);
-            d_G[i*width + j] = round(greenTemp / acum);
-            d_B[i*width + j] = round(blueTemp / acum);
+            d_R[i*width + j] = round(d_R[i*width + j] / acum);
+            d_G[i*width + j] = round(d_G[i*width + j] / acum);
+            d_B[i*width + j] = round(d_B[i*width + j] / acum);
         }
     }
 }
