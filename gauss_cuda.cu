@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
         cudaMalloc((void**) &(d_kernel[i]), tamanio*sizeof(double));
         cudaMemcpy (d_kernel[i], h_kernel[i], tamanio*sizeof(double), cudaMemcpyHostToDevice);
     }
-    err = cudaMemcpy (h_kernel, h_kernel, tamanio*sizeof(double *), cudaMemcpyHostToDevice);
+    err = cudaMemcpy (d_kernel, h_kernel, tamanio*sizeof(double *), cudaMemcpyHostToDevice);
     // err = cudaMemcpy(d_kernel, h_kernel, tamanio*tamanio, cudaMemcpyHostToDevice);
     if (err != cudaSuccess)
     {
