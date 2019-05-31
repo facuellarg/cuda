@@ -32,7 +32,7 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int size, int kernelSize, int operationPerThread)
+blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -40,7 +40,7 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
     
     if( index < height*width )
     {
-        printf("%d\n",size);
+        
         for(int count = 0; count < operationPerThread; count ++){
             int i = (index + count) / width;// fila del pixel al que se le hara gauss
             int j = (index + count) % width;//columna del pixel al que se le hara gauss
@@ -54,7 +54,6 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
             {
                 int y = i - radius + k;
                 y = y < 0 ? 0 : y < height ? y : height - 1;
-                printf("redTemp %d\n",redTemp);
 
                 for (int l = 0; l < kernelSize; l++)
                 {
@@ -344,8 +343,8 @@ int main(int argc, char *argv[])
 
     
     //Se lanza el kernel
-    //blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int size, int kernelSize, int operationPerThread)
-    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, (height*width), tamanio, opt);
+    //blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
+    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, tamanio, opt);
     err = cudaGetLastError();
     if (err != cudaSuccess)
     {
