@@ -348,13 +348,13 @@ int main(int argc, char *argv[])
         cudaMalloc((void**) &(h_kernel[i]), tamanio*sizeof(double));
         cudaMemcpy (h_kernel[i], d_kernel[i], tamanio*sizeof(double), cudaMemcpyHostToDevice);
     }
-    cudaMemcpy (h_kernel, h_kernel, tamanio*sizeof(double *), cudaMemcpyHostToDevice);
+    err = cudaMemcpy (h_kernel, h_kernel, tamanio*sizeof(double *), cudaMemcpyHostToDevice);
     // err = cudaMemcpy(d_kernel, h_kernel, tamanio*tamanio, cudaMemcpyHostToDevice);
-    // if (err != cudaSuccess)
-    // {
-    //     fprintf(stderr, "Failed to copy vector kernel from host to device (error code %s)!\n", cudaGetErrorString(err));
-    //     exit(EXIT_FAILURE);
-    // }
+    if (err != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to copy vector kernel from host to device (error code %s)!\n", cudaGetErrorString(err));
+        exit(EXIT_FAILURE);
+    }
     printf("max threads per block%d\n",deviceProp.maxThreadsPerMultiProcessor);
     printf("launched  threads per block%d\n",( threadsPerBlock));
     printf("operation per thread %d\n",opt);
