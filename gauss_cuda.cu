@@ -56,7 +56,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
                 for (int l = 0; l < (int)sizeof(kernel); l++)
                 {
                     int x = j - radius + l;
-                    printf("val r %d indice\n",r[y*width + x], y*width + x);
+                    printf("val r %d indice %d\n",r[y*width + x], y*width + x);
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += r[y*width + x] * kernel[k][l];
                     greenTemp += g[y*width + x] * kernel[k][l];
@@ -226,9 +226,9 @@ void getChannels()
         for (int j = 0; j < width; j++)
         {
             png_bytep px = &(row[j * 4]);
-            h_R[i * width + j] = px[0];
-            h_G[i * width + j] = px[1];
-            h_B[i * width + j] = px[2];
+            h_R[i * width + j] = (char)px[0];
+            h_G[i * width + j] = (char)px[1];
+            h_B[i * width + j] = (char)px[2];
         }
     }
 }
