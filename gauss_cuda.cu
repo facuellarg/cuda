@@ -25,8 +25,8 @@
 #include <malloc.h>
 
 int width, height;
-unsigned char	 *d_R, *d_G, *d_B;
-unsigned char	 *h_R, *h_G, *h_B;
+unsigned char *d_R, *d_G, *d_B;
+unsigned char *h_R, *h_G, *h_B;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
@@ -57,7 +57,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
-                    printf("redtemp = %f\n",redTemp);
+                    
                     greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
                     blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
