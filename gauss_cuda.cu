@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
 
     
     //Se lanza el kernel
-    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, tamanio,(int)(height*width), opt);
+    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(kernel, height, width, d_R, d_G, d_B, radio, (height*width),tamanio, opt);
     err = cudaGetLastError();
     if (err != cudaSuccess)
     {
