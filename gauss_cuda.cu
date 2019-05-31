@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
     
     //Se lanza el kernel
     //blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
-    blurEffect<<<blocksPerGrid,threadsPerBlock>>>(d_kernel, height, width, d_R, d_G, d_B, radio, tamanio, opt);
+    blurEffect<<<blocksPerGrid,deviceProp.maxThreadsPerMultiProcessor>>>(d_kernel, height, width, d_R, d_G, d_B, radio, tamanio, opt);
     err = cudaGetLastError();
     if (err != cudaSuccess)
     {
