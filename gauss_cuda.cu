@@ -27,9 +27,6 @@
 int width, height;
 unsigned char *d_R, *d_G, *d_B;
 unsigned char *h_R, *h_G, *h_B;
-unsigned char *n_R ;
-unsigned char *n_B ;
-unsigned char *n_G ;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
@@ -254,9 +251,9 @@ void makeRowPointer()
         for (int j = 0; j < width; j++)
         {
             png_bytep px = &(row[j * 4]);
-            px[0] = n_R[i * width + j];
-            px[1] = n_G[i * width + j];
-            px[2] = n_B[i * width + j];
+            px[0] = h_R[i * width + j];
+            px[1] = h_G[i * width + j];
+            px[2] = h_B[i * width + j];
         }
     }
 }
@@ -384,7 +381,7 @@ int main(int argc, char *argv[])
     // Copy the device result vector in device memory to the host result vector
     // in host memory.
     printf("Copy output data from the CUDA device to the host memory\n");
-    err = cudaMemcpy(n_R, d_R, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_R, d_R, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector R from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -392,7 +389,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(n_G, d_G, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_G, d_G, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector G from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -400,7 +397,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(n_B, d_B, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector B from device to host (error code %s)!\n", cudaGetErrorString(err));
