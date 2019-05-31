@@ -58,7 +58,7 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += d_R[y*width + x] * kernel[k][l];
-                    printf("redTemp %d\n",redTemp);
+                    
                     greenTemp += d_G[y*width + x] * kernel[k][l];
                     blueTemp += d_B[y*width + x] * kernel[k][l];
                     acum += kernel[k][l];
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
     // Copy the device result vector in device memory to the host result vector
     // in host memory.
     printf("Copy output data from the CUDA device to the host memory\n");
-    err = cudaMemcpy(h_R, d_R, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_R[0], d_R, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector R from device to host (error code %s)!\n", cudaGetErrorString(err));
