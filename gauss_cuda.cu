@@ -285,9 +285,7 @@ int main(int argc, char *argv[])
     h_R = (unsigned char *)malloc( size );
     h_B = (unsigned char *)malloc(  size );
     h_G = (unsigned char *)malloc( size );
-    n_R = (unsigned char *)malloc( size );
-    n_B = (unsigned char *)malloc(  size );
-    n_G = (unsigned char *)malloc( size );
+  
     
     
     if (h_R == NULL || h_B == NULL || h_G == NULL)
