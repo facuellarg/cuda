@@ -25,14 +25,14 @@
 #include <malloc.h>
 
 int width, height;
-int *d_R, *d_G, *d_B;
-int *h_R, *h_G, *h_B;
+char *d_R, *d_G, *d_B;
+char *h_R, *h_G, *h_B;
 png_byte color_type;
 png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **kernel, int height, int width,  int *r,  int *g,int *b, int radius, int size, int kernelSize, int operationPerThread)
+blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, int radius, int size, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -227,9 +227,9 @@ void getChannels()
         for (int j = 0; j < width; j++)
         {
             png_bytep px = &(row[j * 4]);
-            h_R[i * width + j] = px[0];
-            h_G[i * width + j] = px[1];
-            h_B[i * width + j] = px[2];
+            h_R[i * width + j] = (char)px[0];
+            h_G[i * width + j] = (char)px[1];
+            h_B[i * width + j] = (char)px[2];
 
         }
     }
@@ -273,12 +273,12 @@ int main(int argc, char *argv[])
     int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
-    size_t size = height * width*sizeof(int);
+    size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
     printf("alto %d, ancho\n", (int)((height * width) * sizeof(char)));
-    h_R = (int *)malloc( size );
-    h_B = (int *)malloc( size );
-    h_G = (int *)malloc( size );
+    h_R = (char *)malloc( size );
+    h_B = (char *)malloc(  size );
+    h_G = (char *)malloc( size );
     printf("val de g %d\n", (int)sizeof(h_G));
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
