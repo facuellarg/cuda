@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
-    printf("alto %d, ancho %d\n", height,width);
+    printf("alto %d, ancho %d\n", (height * width) * sizeof(char));
     h_R = (char *)malloc( (height * width) * sizeof(char));
     h_B = (char *)malloc( (height * width) * sizeof(char));
     h_G = (char *)malloc( (height * width) * sizeof(char));
