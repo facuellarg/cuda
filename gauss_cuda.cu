@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double);
+    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
     // Copy the device result vector in device memory to the host result vector
     // in host memory.
     printf("Copy output data from the CUDA device to the host memory\n");
-    err = cudaMemcpy(h_R[0], d_R, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_R, d_R, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector R from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -387,8 +387,8 @@ int main(int argc, char *argv[])
     }
 
     for (int i = 0; i < tamanio; i++)
-        free(kernel[i]);
-    free(kernel);
+        free(h_kernel[i]);
+    free(h_kernel);
     makeRowPointer();
     gettimeofday(&stop_time, NULL);
     timersub(&stop_time, &start_time, &elapsed_time);
