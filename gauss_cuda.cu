@@ -50,6 +50,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             for (int k = 0 ; k < (int)sizeof(kernel); k++ )
             {
                 int y = i - radius + k;
+                printf(y);
                 y = y < 0 ? 0 : y < height ? y : height - 1;
                 for (int l = 0; l < (int)sizeof(kernel); l++)
                 {
