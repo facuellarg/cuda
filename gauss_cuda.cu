@@ -32,7 +32,7 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, int radius, int size, int kernelSize, int operationPerThread)
+blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int size, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
@@ -58,18 +58,18 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, i
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     
-                    redTemp += r[y*width + x] * kernel[k][l];
-                    greenTemp += g[y*width + x] * kernel[k][l];
-                    blueTemp += b[y*width + x] * kernel[k][l];
+                    redTemp += d_R[y*width + x] * kernel[k][l];
+                    greenTemp += d_G[y*width + x] * kernel[k][l];
+                    blueTemp += d_B[y*width + x] * kernel[k][l];
                     acum += kernel[k][l];
                     
                 }
             }
             
-            r[i*width + j] = (redTemp / acum);
+            d_R[i*width + j] = (redTemp / acum);
             printf("r %d\n",r[i*width + j]);
-            g[i*width + j] = (greenTemp / acum);
-            b[i*width + j] = (blueTemp / acum);
+            d_G[i*width + j] = (greenTemp / acum);
+            d_B[i*width + j] = (blueTemp / acum);
         }
     }
 }
