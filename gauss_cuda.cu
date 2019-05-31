@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
+    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
@@ -344,12 +344,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Failed to copy vector B from host to device (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
-    for(int i=0; i<tamanio; i++) {
-        cudaMalloc((void**) &(d_kernel[i]), tamanio*sizeof(double));
-        cudaMemcpy (d_kernel[i], h_kernel[i], tamanio*sizeof(double), cudaMemcpyHostToDevice);
-    }
-    err = cudaMemcpy (d_kernel, h_kernel, tamanio*sizeof(double *), cudaMemcpyHostToDevice);
-    // err = cudaMemcpy(d_kernel, h_kernel, tamanio*tamanio, cudaMemcpyHostToDevice);
+    
+    err = cudaMemcpy(d_kernel, h_kernel, tamanio*tamanio*sizeof(double), cudaMemcpyHostToDevice);
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to copy vector kernel from host to device (error code %s)!\n", cudaGetErrorString(err));
