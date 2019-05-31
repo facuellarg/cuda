@@ -275,11 +275,10 @@ int main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
-    printf("alto %d, ancho\n", (int)((height * width) * sizeof(char)));
     h_R = (char *)malloc( size );
     h_B = (char *)malloc(  size );
     h_G = (char *)malloc( size );
-    printf("val de g %d\n", (int)sizeof(h_G));
+    
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
         fprintf(stderr, "Failed to allocate host vectors!\n");
