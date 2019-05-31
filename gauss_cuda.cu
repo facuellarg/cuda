@@ -56,7 +56,7 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
                 for (int l = 0; l < (int)sizeof(kernel); l++)
                 {
                     int x = j - radius + l;
-                    printf("val r %d\n",r[y*width + x]);
+                    printf("val r %d indice\n",r[y*width + x], y*width + x);
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += r[y*width + x] * kernel[k][l];
                     greenTemp += g[y*width + x] * kernel[k][l];
@@ -282,6 +282,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     getChannels();
+    for(int i = 0 ; i < sizeof(h_R); i++){
+        printf("val de r %d\n", h_R[i]);
+    }
     double **kernel;
     kernel = createKernel(tamanio);
     
