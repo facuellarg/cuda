@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    err = cudaMalloc((void**)&d_kernel, tamanio*tamanio*sizeof(double));
+    err = cudaMalloc((void***)&d_kernel, tamanio*tamanio*sizeof(double));
     if (err != cudaSuccess)
     {
         fprintf(stderr, "Failed to allocate device matrix kernel (error code %s)!\n", cudaGetErrorString(err));
