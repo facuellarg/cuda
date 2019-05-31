@@ -67,9 +67,9 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             //     }
             // }
 
-            d_R[index] = 0;
-            d_G[index] = 0;
-            d_B[index] = 0;
+            d_R[index] = 255;
+            d_G[index] = 255;
+            d_B[index] = 255;
         }
     }
 }
