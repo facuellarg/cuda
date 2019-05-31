@@ -40,7 +40,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     
-    printf("opt %d\n",operationPerThread);
+    printf("indice %d opt %d\n",index,operationPerThread);
     if( index < (height*width) )
     {
         for(int count = 0; count < operationPerThread; count ++){
