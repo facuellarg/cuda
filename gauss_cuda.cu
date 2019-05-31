@@ -50,11 +50,13 @@ blurEffect(double **kernel, int height, int width,  char *r,  char *g,char *b, c
             for (int k = 0 ; k < (int)sizeof(kernel); k++ )
             {
                 int y = i - radius + k;
-                printf(y);
                 y = y < 0 ? 0 : y < height ? y : height - 1;
+                
+
                 for (int l = 0; l < (int)sizeof(kernel); l++)
                 {
                     int x = j - radius + l;
+                    printf("val r",yr[y*width + x]);
                     x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += r[y*width + x] * kernel[k][l];
                     greenTemp += g[y*width + x] * kernel[k][l];
