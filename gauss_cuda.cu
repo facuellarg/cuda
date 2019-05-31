@@ -37,7 +37,7 @@ blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char 
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
     
-    printf("%f\n", d_kernel[0]);
+    
     if( index < height*width )
     {
         
@@ -57,7 +57,7 @@ blurEffect(double *d_kernel, int height, int width,  char *d_R,  char *d_G,char 
                 {
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
-                    printf("%f\n", d_kernel[k*kernelSize + l]);
+                    
                     redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
                     
                     greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
