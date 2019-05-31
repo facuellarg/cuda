@@ -48,8 +48,6 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
             double greenTemp = 0;
             double blueTemp = 0;
             double acum = 0;
-            
-            
             for (int k = 0 ; k < (int)kernelSize; k++ )
             {
                 int y = i - radius + k;
