@@ -54,18 +54,18 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                 {
                     int x = j - radius + l;
                     x = x < 0 ? 0 : x < width ? x : width - 1;
-                    d_R[i*width + j] += d_R[y*width + x] * d_kernel[k*kernelSize + l];
+                    redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
                     
-                    d_G[i*width + j] += d_G[y*width + x] * d_kernel[k*kernelSize + l];
-                    d_B[i*width + j] += d_B[y*width + x] * d_kernel[k*kernelSize + l];
+                    greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
+                    blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
                     
                 }
             }
             
-            d_R[i*width + j] = 0;
-            d_G[i*width + j] = 0;
-            d_B[i*width + j] = 0;
+            d_R[i*width + j] = round(redTemp / acum);
+            d_G[i*width + j] = round(greenTemp / acum);
+            d_B[i*width + j] = round(blueTemp / acum);
         }
     }
 }
@@ -312,14 +312,14 @@ int main(int argc, char *argv[])
     err = cudaMalloc((void **)&d_G, size);
     if (err != cudaSuccess)
     {
-        fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        fprintf(stderr, "Failed to allocate device vector G (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
 
     err = cudaMalloc((void **)&d_B, size);
     if (err != cudaSuccess)
     {
-        fprintf(stderr, "Failed to allocate device vector R (error code %s)!\n", cudaGetErrorString(err));
+        fprintf(stderr, "Failed to allocate device vector B (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
 
@@ -399,6 +399,11 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Failed to copy vector B from device to host (error code %s)!\n", cudaGetErrorString(err));
         exit(EXIT_FAILURE);
     }
+    cudaFree(d_R);
+    cudaFree(d_G);
+    cudaFree(d_B);
+    cudaFree(d_kernel);
+
 
   
     free(h_kernel);
