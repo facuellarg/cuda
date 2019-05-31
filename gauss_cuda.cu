@@ -288,7 +288,9 @@ int main(int argc, char *argv[])
     getChannels();
     
  
-
+    for(int i = 0; i < malloc_usable_size(h_B); i++){
+        printf("valor b %d\n",h_B[i]);
+    }
     
     double **kernel;
     kernel = createKernel(tamanio);
