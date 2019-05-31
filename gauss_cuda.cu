@@ -69,8 +69,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             // }
 
             d_R[i*width + j] = 0;
-            
-            d_G[i*width + j] = 0;
+            // d_G[i*width + j] = 0;
             d_B[i*width + j] = 0;
         }
     }
@@ -395,7 +394,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(h_G, d_G, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(n_G, d_G, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector G from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -403,7 +402,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(n_B, d_B, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector B from device to host (error code %s)!\n", cudaGetErrorString(err));
