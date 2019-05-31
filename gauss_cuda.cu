@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
     }
     getChannels();
     for(int i = 0 ; i < (int)sizeof(h_R); i++){
-        printf("val de r %d\n", sizeof(h_R));
+        printf("val de r %d\n", (int)sizeof(h_G));
     }
     double **kernel;
     kernel = createKernel(tamanio);
