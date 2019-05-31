@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
     }
     getChannels();
     
-    printf("val de r %d\n", (int)sizeof(h_R));
+    printf("val de r %d\n", h_R[9]);
     printf("val de g %d\n", (int)sizeof(h_G));
     printf("val de b %d\n", (int)sizeof(h_B));
 
