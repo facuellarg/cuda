@@ -40,7 +40,7 @@ blurEffect(double **kernel, int height, int width,  char *d_R,  char *d_G,char *
     
     if( index < size )
     {
-        printf(operationPerThread);
+        printf("%d\n",operationPerThread);
         for(int count = 0; count < operationPerThread; count ++){
             int i = (index + count) / width;// fila del pixel al que se le hara gauss
             int j = (index + count) % width;//columna del pixel al que se le hara gauss
