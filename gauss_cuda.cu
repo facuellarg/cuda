@@ -67,7 +67,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                     
                 }
             }
-            printf("valor r %d\n",d_R[i*width + j]);
+
             d_R[i*width + j] = 0;
             
             d_G[i*width + j] = 0;
@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
     // Copy the device result vector in device memory to the host result vector
     // in host memory.
     printf("Copy output data from the CUDA device to the host memory\n");
-    err = cudaMemcpy(n_R, d_R, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_R, d_R, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector R from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -395,7 +395,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(n_G, d_G, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_G, d_G, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector G from device to host (error code %s)!\n", cudaGetErrorString(err));
@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
     }
 
     
-    err = cudaMemcpy(n_B, d_B, size, cudaMemcpyDeviceToHost);
+    err = cudaMemcpy(h_B, d_B, size, cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {    
         fprintf(stderr, "Failed to copy vector B from device to host (error code %s)!\n", cudaGetErrorString(err));
