@@ -275,9 +275,9 @@ int main(int argc, char *argv[])
     size_t size = height * width*sizeof(char);
     // Asignar memoria para cpu
     printf("alto %d, ancho\n", (int)((height * width) * sizeof(char)));
-    h_R = (char *)malloc( (height * width) * sizeof(char));
-    h_B = (char *)malloc( (height * width) * sizeof(char));
-    h_G = (char *)malloc( (height * width) * sizeof(char));
+    h_R = (char *)malloc( (height * width) * sizeof(int));
+    h_B = (char *)malloc( (height * width) * sizeof(int));
+    h_G = (char *)malloc( (height * width) * sizeof(int));
     printf("val de g %d\n", (int)sizeof(h_G));
     if (h_R == NULL || h_B == NULL || h_G == NULL)
     {
