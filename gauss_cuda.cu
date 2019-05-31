@@ -32,7 +32,7 @@ png_byte bit_depth;
 png_bytep *row_pointers;
 size_t size;
  __global__ void
-blurEffect(double **h_kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
+blurEffect(double *h_kernel, int height, int width,  char *d_R,  char *d_G,char *d_B, int radius, int kernelSize, int operationPerThread)
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
