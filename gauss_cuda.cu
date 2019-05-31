@@ -69,7 +69,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             }
             printf("valor r %d\n",d_R[i*width + j]);
             d_R[i*width + j] = 0;
-            printf("valor r despues %d\n",d_R[i*width + j]);
+            
             d_G[i*width + j] = 0;
             d_B[i*width + j] = 0;
         }
