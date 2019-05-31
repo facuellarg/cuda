@@ -36,8 +36,6 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
 {
     
     int index = ((blockDim.x * blockIdx.x + threadIdx.x));
-    
-    printf("indice %d opt %d\n",index,operationPerThread);
     if( index < (height*width) )
     {
         for(int count = 0; count < operationPerThread; count ++){
@@ -410,6 +408,9 @@ int main(int argc, char *argv[])
   
     free(h_kernel);
     makeRowPointer();
+    cudaFree(h_R);
+    cudaFree(h_G);
+    cudaFree(h_B);
     gettimeofday(&stop_time, NULL);
     timersub(&stop_time, &start_time, &elapsed_time);
     char tiempo[10];
