@@ -61,10 +61,10 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             //     }
             // }
 
-            for (int fila = i - radio; fila < i + radio + (tamaño%2); fila++)
+            for (int fila = i - radius; fila < i + radius + (kernelSize%2); fila++)
             {
                 int y = fila < 0 ? 0 : fila < height ? fila : height - 1;
-                for (int columna = j - radio; columna < j + radio + (tamaño % 2); columna++)
+                for (int columna = j - radius; columna < j + radius + (kernelSize % 2); columna++)
                 {
                     int x = columna < 0 ? 0 : columna < width ? columna : width - 1;
                     redTemp += d_R[y*width + x] * d_kernel[count];
