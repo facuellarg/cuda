@@ -40,8 +40,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     {
         for(int count = 0; count < operationPerThread; count ++){
             
-            // int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
-            // int j = (index*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
+            int i = (indeºx*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
             double redTemp = 0;
             double blueTemp = 0;
             double greenTemp = 0;
