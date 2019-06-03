@@ -39,7 +39,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     
     {
         for(int count = 0; count < operationPerThread; count ++){
-            if( index*operationPerThread + count < (height*width) ){
+            
             int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
             int j = (index*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
             double redTemp = 0;
@@ -62,7 +62,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                     blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
 
-                 
+                    
                     
                 }
             }
@@ -73,7 +73,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             }
             
         }
-    }
+    
 }
 
 void read_png_file(char *filename)
