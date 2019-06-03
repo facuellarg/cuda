@@ -268,9 +268,7 @@ int main(int argc, char *argv[])
     cudaGetDeviceProperties(&deviceProp, dev);
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
     threadsPerBlock = threadsPerBlock*2;
-    threadsPerBlock = 1;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
-    blocksPerGrid = 1;
 //-------------------------------------------------
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
