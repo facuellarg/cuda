@@ -40,30 +40,38 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     {
         for(int count = 0; count < operationPerThread; count ++){
             if( index*operationPerThread + count < (height*width) ){
-                int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
-                int j = (index*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
-                double redTemp = 0;
-                double blueTemp = 0;
-                double greenTemp = 0;
-                double acum = 0;
-                for (int k = 0; k < kernelSize; k++ )
+int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
+            int j = (index*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
+            double redTemp = 0;
+            double blueTemp = 0;
+            double greenTemp = 0;
+            double acum = 0;
+            for (int fila = i - radius; fila < i + radius + (kernelSize%2); fila++)
+            // for (int k = 0; k < kernelSize; k++ )
+            {
+                int y = fila < 0 ? 0 : fila < height ? fila : height - 1;
+                // for (int l = 0; l < kernelSize; l++)
+                for (int columna = j - radius; columna < j + radius + (kernelSize % 2); columna++)
                 {
-                    int y = (i - radius + k + height)%height;
-                    for (int l = 0; l < kernelSize; l++)
-                    {
-                        int x = (j - radius + l + width )% width;
-                        // x = x < 0 ? 0 : x < width ? x : width - 1;
-                        redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
-                        greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
-                        blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
-                        acum += d_kernel[k*kernelSize + l];
-                        
-                    }
+                    // int x = (j - radius + l + width )% width;
+                    // // x = x < 0 ? 0 : x < width ? x : width - 1;
+                    // redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
+                    // greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
+                    // blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
+                    // acum += d_kernel[k*kernelSize + l];
+
+                    int x = columna < 0 ? 0 : columna < width ? columna : width - 1;
+                    redTemp += d_R[y*width + x] * d_kernel[count];
+                    greenTemp += d_G[y*width + x] * d_kernel[count];
+                    blueTemp += d_B[y*width + x] * d_kernel[count];
+                    acum += d_kernel[count++];
+                    
                 }
-    
-                d_R[i*width + j] = redTemp/acum;
-                d_G[i*width + j] = greenTemp/acum;
-                d_B[i*width + j] = blueTemp/acum;
+            }
+
+            d_R[i*width + j] = redTemp/acum;
+            d_G[i*width + j] = greenTemp/acum;
+            d_B[i*width + j] = blueTemp/acum;
             }
             
         }
