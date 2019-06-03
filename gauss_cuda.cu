@@ -40,7 +40,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
     {
         for(int count = 0; count < operationPerThread; count ++){
             if( index*operationPerThread + count < (height*width) ){
-int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
+            int i = (index*operationPerThread + count) / width;// fila del pixel al que se le hara gauss
             int j = (index*operationPerThread + count) % width;//columna del pixel al que se le hara gauss
             double redTemp = 0;
             double blueTemp = 0;
@@ -280,6 +280,8 @@ int main(int argc, char *argv[])
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
     threadsPerBlock = threadsPerBlock*2;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
+    threadsPerBlock = 1;
+    blocksPerGrid = 1;
 //-------------------------------------------------
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
