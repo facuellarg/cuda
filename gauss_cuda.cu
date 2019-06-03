@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
     threadsPerBlock = threadsPerBlock*2;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
     // threadsPerBlock = 1;
-    // blocksPerGrid = 1;
+    blocksPerGrid = 1;
 //-------------------------------------------------
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
