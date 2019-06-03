@@ -70,6 +70,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             d_R[i*width + j] = redTemp/acum;
             d_G[i*width + j] = greenTemp/acum;
             d_B[i*width + j] = blueTemp/acum;
+            __syncthreads();
             }
             
         }
