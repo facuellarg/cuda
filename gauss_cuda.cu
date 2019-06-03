@@ -45,34 +45,21 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
             double blueTemp = 0;
             double greenTemp = 0;
             double acum = 0;
-            int count = 0;
-            // for (int k = 0; k < kernelSize; k++ )
-            // {
-            //     int y = (i - radius + k + height)%height;
-            //     for (int l = 0; l < kernelSize; l++)
-            //     {
-            //         int x = (j - radius + l + width )% width;
-            //         // x = x < 0 ? 0 : x < width ? x : width - 1;
-            //         redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
-            //         greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
-            //         blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
-            //         acum += d_kernel[k*kernelSize + l];
-                    
-            //     }
-            // }
-
-            for (int fila = i - radius; fila < i + radius + (kernelSize%2); fila++)
+            for (int k = 0; k < kernelSize; k++ )
             {
-                int y = fila < 0 ? 0 : fila < height ? fila : height - 1;
-                for (int columna = j - radius; columna < j + radius + (kernelSize % 2); columna++)
+                int y = (i - radius + k + height)%height;
+                for (int l = 0; l < kernelSize; l++)
                 {
-                    int x = columna < 0 ? 0 : columna < width ? columna : width - 1;
-                    redTemp += d_R[y*width + x] * d_kernel[count];
-                    greenTemp += d_G[y*width + x] * d_kernel[count];
-                    blueTemp += d_B[y*width + x] * d_kernel[count];
-                    acum += d_kernel[count++];
+                    int x = (j - radius + l + width )% width;
+                    // x = x < 0 ? 0 : x < width ? x : width - 1;
+                    redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
+                    greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
+                    blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
+                    acum += d_kernel[k*kernelSize + l];
+                    
                 }
             }
+
             d_R[i*width + j] = redTemp/acum;
             d_G[i*width + j] = greenTemp/acum;
             d_B[i*width + j] = blueTemp/acum;
@@ -280,9 +267,10 @@ int main(int argc, char *argv[])
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
-	threadsPerBlock = threadsPerBlock*2;
+    threadsPerBlock = threadsPerBlock*2;
+    threadsPerBlock = 1;
     int blocksPerGrid =   deviceProp.multiProcessorCount;
-    
+    blocksPerGrid = 1;
 //-------------------------------------------------
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
