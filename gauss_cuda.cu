@@ -54,7 +54,7 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                 for (int l = 0; l < kernelSize; l++)
                 
                 {
-                    int x = (j - radius + l;
+                    int x = (j - radius + l);
                     x = x < 0 ?  0 : x > width ? width -1 : x;
                     // x = x < 0 ? 0 : x < width ? x : width - 1;
                     redTemp += d_R[y*width + x] * d_kernel[k*kernelSize + l];
