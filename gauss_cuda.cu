@@ -61,8 +61,6 @@ blurEffect(double *d_kernel, int height, int width,  unsigned char *d_R,  unsign
                     greenTemp += d_G[y*width + x] * d_kernel[k*kernelSize + l];
                     blueTemp += d_B[y*width + x] * d_kernel[k*kernelSize + l];
                     acum += d_kernel[k*kernelSize + l];
-                    __syncthreads();
-                    
                     
                 }
             }
@@ -427,7 +425,7 @@ int main(int argc, char *argv[])
     sprintf(tiempo, "%f", elapsed_time.tv_sec + elapsed_time.tv_usec / 1000000.0);
     write_png_file(argv[2]);
     char text_otuput[100];
-    sprintf(text_otuput, "fopenMP\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", threadsPerBlock, argv[3], width, tiempo);
+    sprintf(text_otuput, "CUDA\tHilos : %d\t Tamaño del Kernel %s\t Tamaño de la imagen %dpx\t Tiempo %s", threadsPerBlock*blocksPerGrid, argv[3], width, tiempo);
     write_output(text_otuput);
 
     return 0;

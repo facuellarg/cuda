@@ -1,2 +1,0 @@
-fopenMP	Hilos : 1	 Tamaño del Kernel 5	 Tamaño de la imagen 720px	 Tiempo 0.361082
-fopenMP	Hilos : 1	 Tamaño del Kernel 5	 Tamaño de la imagen 720px	 Tiempo 0.363935
