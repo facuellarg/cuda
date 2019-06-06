@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
-    threadsPerBlock = threadsPerBlock*2;
+    threadsPerBlock = threadsPerBlock*atoi(agrv[4]);
     int blocksPerGrid =   deviceProp.multiProcessorCount;
     // threadsPerBlock = 1;
     // blocksPerGrid = 1;
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
     int tamanio = atoi(argv[3]);
     char radio = (char)floor(tamanio / 2);
     read_png_file(argv[1]);
-    int opt = (int)(ceil(height * width/ (threadsPerBlock)));
+    int opt = (int)(ceil(height * width/ (threadsPerBlock*blocksPerGrid)));
     struct timeval start_time, stop_time, elapsed_time;
     gettimeofday(&start_time, NULL);
     size_t size = height * width*sizeof(unsigned char);
