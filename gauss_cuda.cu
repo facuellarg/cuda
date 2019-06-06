@@ -265,7 +265,7 @@ void makeRowPointer()
 int main(int argc, char *argv[])
 {
 
-    if (argc != 4)
+    if (argc != 5)
         abort();  
     cudaError_t err = cudaSuccess;
 // declarar  la cantidad de hilos segun la gpu
