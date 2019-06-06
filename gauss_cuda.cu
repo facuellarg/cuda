@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, dev);
     int threadsPerBlock = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
-    threadsPerBlock = threadsPerBlock*atoi(agrv[4]);
+    threadsPerBlock = threadsPerBlock*atoi(argv[4]);
     int blocksPerGrid =   deviceProp.multiProcessorCount;
     // threadsPerBlock = 1;
     // blocksPerGrid = 1;
