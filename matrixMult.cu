@@ -165,7 +165,7 @@
  
      // compute time elapse on GPU computing
      cudaEventElapsedTime(&gpu_elapsed_time_ms, start, stop);
-     printf("Time elapsed on matrix multiplication of %dx%d . %dx%d on GPU: %f ms.\n\n", m, n, n, k, gpu_elapsed_time_ms);
+    //  printf("Time elapsed on matrix multiplication of %dx%d . %dx%d on GPU: %f ms.\n\n", m, n, n, k, gpu_elapsed_time_ms);
  
      // start the CPU version
      cudaEventRecord(start, 0);
@@ -175,7 +175,7 @@
      cudaEventRecord(stop, 0);
      cudaEventSynchronize(stop);
      cudaEventElapsedTime(&cpu_elapsed_time_ms, start, stop);
-     printf("Time elapsed on matrix multiplication of %dx%d . %dx%d on CPU: %f ms.\n\n", m, n, n, k, cpu_elapsed_time_ms);
+     //printf("Time elapsed on matrix multiplication of %dx%d . %dx%d on CPU: %f ms.\n\n", m, n, n, k, cpu_elapsed_time_ms);
  
      // validate results computed by GPU
      int all_ok = 1;
@@ -195,7 +195,8 @@
      // roughly compute speedup
      if(all_ok)
      {
-         printf("all results are correct!!!, speedup = %f\n", cpu_elapsed_time_ms / gpu_elapsed_time_ms);
+        //  printf("all results are correct!!!, speedup = %f\n", cpu_elapsed_time_ms / gpu_elapsed_time_ms);
+         printf("%d\t%d\t%f\n",n,atoi(argv[2]), cpu_elapsed_time_ms / gpu_elapsed_time_ms);
      }
      else
      {
