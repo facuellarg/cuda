@@ -216,7 +216,7 @@
      dim3 dimGrid(grid_cols, grid_rows);
      dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
      
-        printf("block %d",dimBlock);
+        printf("block %d\n",dimBlock.x);
      // Launch kernel 
      
      if(m == n && n == k)
