@@ -38,68 +38,6 @@
  
  /*
  *********************************************************************
- function name: gpu_square_matrix_mult
- description: dot product of two matrix (not only square) in GPU
- parameters: 
-             &a GPU device pointer to a n X n matrix (A)
-             &b GPU device pointer to a n X n matrix (B)
-             &c GPU device output purpose pointer to a n X n matrix (C) 
-             to store the result
- Note:
-     grid and block should be configured as:
-         dim3 dim_grid((n - 1) / BLOCK_SIZE + 1, (n - 1) / BLOCK_SIZE + 1, 1);
-         dim3 dim_block(BLOCK_SIZE, BLOCK_SIZE, 1);
- return: none
- *********************************************************************
- */
-/*__global__ void gpu_square_matrix_mult(int *d_a, int *d_b, int *d_result, int n) 
- {
-     __shared__ int tile_a[BLOCK_SIZE][BLOCK_SIZE];
-     __shared__ int tile_b[BLOCK_SIZE][BLOCK_SIZE];
- 
-     int row = blockIdx.y * BLOCK_SIZE + threadIdx.y;
-     int col = blockIdx.x * BLOCK_SIZE + threadIdx.x;
-     int tmp = 0;
-     int idx;
- 
-     for (int sub = 0; sub < gridDim.x; ++sub) 
-     {
-         idx = row * n + sub * BLOCK_SIZE + threadIdx.x;
-         if(idx >= n*n)
-         {
-             // n may not divisible by BLOCK_SIZE
-             tile_a[threadIdx.y][threadIdx.x] = 0;
-         }
-         else
-         {
-             tile_a[threadIdx.y][threadIdx.x] = d_a[idx];
-         }
- 
-         idx = (sub * BLOCK_SIZE + threadIdx.y) * n + col;
-         if(idx >= n*n)
-         {
-             tile_b[threadIdx.y][threadIdx.x] = 0;
-         }  
-         else
-         {
-             tile_b[threadIdx.y][threadIdx.x] = d_b[idx];
-         }
-         __syncthreads();
- 
-         for (int k = 0; k < BLOCK_SIZE; ++k) 
-         {
-             tmp += tile_a[threadIdx.y][k] * tile_b[k][threadIdx.x];
-         }
-         __syncthreads();
-     }
-     if(row < n && col < n)
-     {
-         d_result[row * n + col] = tmp;
-     }
- }
- */
- /*
- *********************************************************************
  function name: gpu_matrix_transpose
  description: matrix transpose
  parameters: 
@@ -217,15 +155,7 @@
      dim3 dimBlock(BLOCK_SIZE*atoi(argv[2]), BLOCK_SIZE*atoi(argv[2]));
     
      gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);   
-    //  if(m == n && n == k)
-    //  {
-    //     gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);   
-    //     //  gpu_square_matrix_mult<<< , dimBlock>>>(d_a, d_b, d_c, n);    
-    //  }
-    //  else
-    //  {
-    //      gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);    
-    //  }
+
      // Transefr results from device to host 
      cudaMemcpy(h_c, d_c, sizeof(int)*m*k, cudaMemcpyDeviceToHost);
      cudaThreadSynchronize();
