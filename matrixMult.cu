@@ -215,16 +215,16 @@
      unsigned int grid_cols = (k + BLOCK_SIZE - 1) / BLOCK_SIZE;
      dim3 dimGrid(grid_cols, grid_rows);
      dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-     dimBlock = atoi(argv[2]);
+    //  dimBlock = atoi(argv[2]);
     
      // Launch kernel 
      if(m == n && n == k)
      {
-         gpu_square_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, n);    
+         gpu_square_matrix_mult<<<dimGrid, atoi(argv[2]);>>>(d_a, d_b, d_c, n);    
      }
      else
      {
-         gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);    
+         gpu_matrix_mult<<<dimGrid, atoi(argv[2]);>>>(d_a, d_b, d_c, m, n, k);    
      }
      // Transefr results from device to host 
      cudaMemcpy(h_c, d_c, sizeof(int)*m*k, cudaMemcpyDeviceToHost);
