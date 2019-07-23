@@ -217,6 +217,8 @@
      dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
      
         printf("block %d\n",dimBlock.x);
+        printf("block %d\n",dimBlock.y);
+        printf("block %d\n",dimBlock.z);
      // Launch kernel 
      
      if(m == n && n == k)
