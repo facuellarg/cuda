@@ -220,11 +220,11 @@
      // Launch kernel 
      if(m == n && n == k)
      {
-         gpu_square_matrix_mult<<<dimGrid, atoi(argv[2]);>>>(d_a, d_b, d_c, n);    
+         gpu_square_matrix_mult<<<dimGrid, atoi(argv[2])>>>(d_a, d_b, d_c, n);    
      }
      else
      {
-         gpu_matrix_mult<<<dimGrid, atoi(argv[2]);>>>(d_a, d_b, d_c, m, n, k);    
+         gpu_matrix_mult<<<dimGrid, atoi(argv[2])>>>(d_a, d_b, d_c, m, n, k);    
      }
      // Transefr results from device to host 
      cudaMemcpy(h_c, d_c, sizeof(int)*m*k, cudaMemcpyDeviceToHost);
