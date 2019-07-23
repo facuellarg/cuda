@@ -214,8 +214,8 @@
      unsigned int grid_rows = (m + BLOCK_SIZE - 1) / BLOCK_SIZE;
      unsigned int grid_cols = (k + BLOCK_SIZE - 1) / BLOCK_SIZE;
      dim3 dimGrid(grid_cols, grid_rows);
-     dim3 dimBlock(BLOCK_SIZE, atoi(argv[2]);
-    //  dimBlock = atoi(argv[2]);
+     dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+     
     
      // Launch kernel 
      if(m == n && n == k)
