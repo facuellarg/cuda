@@ -214,12 +214,8 @@
      unsigned int grid_rows = (m + BLOCK_SIZE - 1) / BLOCK_SIZE;
      unsigned int grid_cols = (k + BLOCK_SIZE - 1) / BLOCK_SIZE;
      dim3 dimGrid(grid_cols, grid_rows);
-     dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
-     
-        printf("block %d\n",dimBlock.x);
-        printf("block %d\n",dimBlock.y);
-        printf("block %d\n",dimBlock.z);
-     // Launch kernel 
+     dim3 dimBlock(BLOCK_SIZE*atoi(argv[2]), BLOCK_SIZE*atoi(argv[2]));
+    
      
      if(m == n && n == k)
      {
