@@ -2,7 +2,7 @@
  #include <stdlib.h>
  #include <assert.h>
  
- #define BLOCK_SIZE 16
+ #define BLOCK_SIZE 8
  
  /*
  *********************************************************************
@@ -167,8 +167,9 @@
      int m, n, k;
      /* Fixed seed for illustration */
      srand(3333);
-     printf("please type in m n and k\n");
-     scanf("%d %d %d", &m, &n, &k);
+     n = atoi(argv[1]);
+     m = n;
+     k = n;
  
      // allocate memory in host RAM, h_cc is used to store CPU result
      int *h_a, *h_b, *h_c, *h_cc;
