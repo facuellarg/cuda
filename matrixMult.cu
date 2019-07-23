@@ -36,33 +36,7 @@
      }
  } 
  
- /*
- *********************************************************************
- function name: gpu_matrix_transpose
- description: matrix transpose
- parameters: 
-             &mat_in GPU device pointer to a rows X cols matrix
-             &mat_out GPU device output purpose pointer to a cols X rows matrix 
-             to store the result
- Note:
-     grid and block should be configured as:
-         dim3 dim_grid((n - 1) / BLOCK_SIZE + 1, (n - 1) / BLOCK_SIZE + 1, 1);
-         dim3 dim_block(BLOCK_SIZE, BLOCK_SIZE, 1);
- return: none
- *********************************************************************
- */
- __global__ void gpu_matrix_transpose(int* mat_in, int* mat_out, unsigned int rows, unsigned int cols) 
- {
-     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
-     unsigned int idy = blockIdx.y * blockDim.y + threadIdx.y;
- 
-     if (idx < cols && idy < rows) 
-     {
-         unsigned int pos = idy * cols + idx;
-         unsigned int trans_pos = idx * rows + idy;
-         mat_out[trans_pos] = mat_in[pos];
-     }
- }
+
  /*
  *********************************************************************
  function name: cpu_matrix_mult
@@ -154,7 +128,7 @@
      dim3 dimGrid(grid_cols, grid_rows);
      dim3 dimBlock(BLOCK_SIZE*atoi(argv[2]), BLOCK_SIZE*atoi(argv[2]));
     
-     gpu_square_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, n);
+     gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k); 
 
      // Transefr results from device to host 
      cudaMemcpy(h_c, d_c, sizeof(int)*m*k, cudaMemcpyDeviceToHost);
