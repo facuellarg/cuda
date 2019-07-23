@@ -52,7 +52,7 @@
  return: none
  *********************************************************************
  */
- __global__ void gpu_square_matrix_mult(int *d_a, int *d_b, int *d_result, int n) 
+/*__global__ void gpu_square_matrix_mult(int *d_a, int *d_b, int *d_result, int n) 
  {
      __shared__ int tile_a[BLOCK_SIZE][BLOCK_SIZE];
      __shared__ int tile_b[BLOCK_SIZE][BLOCK_SIZE];
@@ -97,7 +97,7 @@
          d_result[row * n + col] = tmp;
      }
  }
- 
+ */
  /*
  *********************************************************************
  function name: gpu_matrix_transpose
@@ -216,16 +216,16 @@
      dim3 dimGrid(grid_cols, grid_rows);
      dim3 dimBlock(BLOCK_SIZE*atoi(argv[2]), BLOCK_SIZE*atoi(argv[2]));
     
-     
-     if(m == n && n == k)
-     {
-        gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);   
-        //  gpu_square_matrix_mult<<< , dimBlock>>>(d_a, d_b, d_c, n);    
-     }
-     else
-     {
-         gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);    
-     }
+     gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);   
+    //  if(m == n && n == k)
+    //  {
+    //     gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);   
+    //     //  gpu_square_matrix_mult<<< , dimBlock>>>(d_a, d_b, d_c, n);    
+    //  }
+    //  else
+    //  {
+    //      gpu_matrix_mult<<<dimGrid, dimBlock>>>(d_a, d_b, d_c, m, n, k);    
+    //  }
      // Transefr results from device to host 
      cudaMemcpy(h_c, d_c, sizeof(int)*m*k, cudaMemcpyDeviceToHost);
      cudaThreadSynchronize();
